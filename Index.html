@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Educacional</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 40px 20px;
+    color: #ffffff;
+    text-align: center;
+    min-height: 100vh;
+  }
+
+  h1 {
+    color: #ffffff;
+    margin-bottom: 40px;
+    font-size: 3.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .main-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    animation: slideUp 0.8s ease-out;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px 35px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .section {
+    display: none;
+    max-width: 1200px;
+    margin: 40px auto;
+    text-align: left;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .back-btn {
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+  }
+
+  /* Botão parar jogo - destaque vermelho */
+  .stop-btn {
+    background: rgba(220, 53, 69, 0.3);
+    border: 2px solid rgba(220, 53, 69, 0.5);
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .stop-btn:hover {
+    background: rgba(220, 53, 69, 0.5);
+    border: 2px solid rgba(220, 53, 69, 0.8);
+    transform: translateY(-3px);
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.2);
+  }
+
+  .card a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 600;
+    display: block;
+    font-size: 1.1em;
+  }
+
+  .new { border-top: 5px solid #4ade80; }
+  .old { border-top: 5px solid #fbbf24; }
+  .extra { border-top: 5px solid #a855f7; }
+
+  .game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+  }
+
+  .game-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .game-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.2);
+  }
+
+  .game-card img {
+    width: 100%;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  .game-card:hover img {
+    transform: scale(1.05);
+  }
+
+  iframe {
+    width: 100%;
+    height: 650px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 30px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  }
+
+  h2 {
+    color: #ffffff;
+    font-size: 2.2em;
+    margin: 40px 0 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .hidden { display: none; }
+
+  /* Container do iframe com botão parar */
+  .iframe-container {
+    position: relative;
+    margin-top: 30px;
+  }
+
+  .iframe-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2.5em; }
+    .container { grid-template-columns: 1fr; }
+    button { width: 100%; }
+    .main-buttons { flex-direction: column; }
+    .iframe-controls { flex-direction: column; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<h1>🌐 Portal Educacional</h1>
+
+<!-- PÁGINA INICIAL -->
+<div id="menuPrincipal" class="main-buttons">
+  <button onclick="abrirSecao('teacher')">👩‍🏫 Teacher</button>
+  <button onclick="abrirSecao('admin')">🏫 Administração</button>
+  <button onclick="abrirSecao('alunos')">🎮 Alunos</button>
+</div>
+
+<!-- TEACHER -->
+<div id="teacher" class="section">
+  <button class="back-btn" onclick="voltar()">⬅ Voltar</button>
+
+  <h2>📗 Livros Novos</h2>
+  <div class="container" id="listaNovos"></div>
+
+  <h2>📕 Livros Antigos</h2>
+  <div class="container" id="listaAntigos"></div>
+
+  <h2>📘 Materiais Extras</h2>
+  <div class="container" id="listaExtras"></div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="section">
+  <button class="back-btn" onclick="voltar()">⬅ Voltar</button>
+  <h2>Área Administrativa</h2>
+  <p>Conteúdo protegido por senha.</p>
+</div>
+
+<!-- ALUNOS -->
+<div id="alunos" class="section">
+  <button class="back-btn" onclick="voltar()">⬅ Voltar</button>
+
+  <div class="main-buttons">
+    <button onclick="abrirSubSecao('games')">🎮 Games</button>
+    <button onclick="abrirSubSecao('extrasAlunos')">📘 Extra Activities</button>
+  </div>
+
+  <!-- Games -->
+  <div id="games" class="hidden">
+    <h2>Escolha um jogo para começar:</h2>
+    <div class="game-list">
+      <div class="game-card" onclick="abrirJogo('https://www.gamestolearnenglish.com/')">
+        <img src="https://www.gamestolearnenglish.com/wp-content/uploads/2021/07/screenshot-homepage.png" alt="Games to Learn English">
+        <p><strong>Games to Learn English</strong></p>
+      </div>
+      <div class="game-card" onclick="abrirJogoExterno('https://www.foodguessr.com/game/daily')">
+        <img src="https://www.foodguessr.com/images/og-image.jpg" alt="FoodGuessr">
+        <p><strong>FoodGuessr</strong></p>
+      </div>
+      <div class="game-card" onclick="abrirJogoExterno('https://garticphone.com/en')">
+        <img src="https://garticphone.com/images/share.png" alt="Gartic Phone">
+        <p><strong>Gartic Phone</strong></p>
+      </div>
+      <div class="game-card" onclick="abrirJogo('https://zty.pe/')">
+        <img src="https://zty.pe/images/ztype.png" alt="ZType">
+        <p><strong>ZType - Typing Game</strong></p>
+      </div>
+    </div>
+    
+    <!-- Container do iframe com controles -->
+    <div id="iframeContainer" class="hidden iframe-container">
+      <iframe id="gameIframe"></iframe>
+      <div class="iframe-controls">
+        <button class="back-btn" onclick="voltarParaGames()">⬅ Voltar para Games</button>
+        <button class="stop-btn" onclick="pararJogo()">⏹️ Parar Jogo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra Activities -->
+  <div id="extrasAlunos" class="hidden">
+    <h2>Extra Activities</h2>
+    <p>Conteúdo em desenvolvimento...</p>
+  </div>
+</div>
+
+<script>
+const SENHA = "2020";
+
+// ABRIR SEÇÃO COM OU SEM SENHA
+function abrirSecao(secao) {
+  if (secao === 'teacher' || secao === 'admin') {
+    const senhaDigitada = prompt("🔐 Digite a senha:");
+    if(senhaDigitada !== SENHA){
+      alert("Senha incorreta!");
+      return;
+    }
+  }
+  document.getElementById('menuPrincipal').style.display = 'none';
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById(secao).style.display = 'block';
+
+  // Carregar materiais apenas quando Teacher é aberto
+  if(secao === 'teacher') carregarPastas();
+}
+
+// VOLTAR PARA MENU
+function voltar() {
+  // Para o jogo antes de voltar
+  pararJogo();
+  
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById('menuPrincipal').style.display = 'flex';
+  document.getElementById('iframeContainer').classList.add('hidden');
+}
+
+// VOLTAR PARA LISTA DE GAMES (sem parar completamente)
+function voltarParaGames() {
+  document.getElementById('iframeContainer').classList.add('hidden');
+}
+
+// PARAR JOGO COMPLETAMENTE - Esta função para realmente o jogo
+function pararJogo() {
+  const iframe = document.getElementById('gameIframe');
+  
+  // Método 1: Remover o src completamente
+  iframe.src = 'about:blank';
+  
+  // Método 2: Tentar parar qualquer áudio/vídeo
+  try {
+    iframe.contentWindow.postMessage('stop', '*');
+  } catch (e) {
+    // Ignora erros de cross-origin
+  }
+  
+  // Método 3: Esconder o iframe
+  document.getElementById('iframeContainer').classList.add('hidden');
+  
+  console.log('Jogo parado completamente');
+}
+
+// ABRIR SUBSEÇÃO DENTRO DE ALUNOS
+function abrirSubSecao(id) {
+  // Para qualquer jogo rodando antes de mudar de seção
+  pararJogo();
+  
+  document.getElementById('games').classList.add('hidden');
+  document.getElementById('extrasAlunos').classList.add('hidden');
+  document.getElementById('iframeContainer').classList.add('hidden');
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// ABRIR JOGO NO IFRAME
+function abrirJogo(url) {
+  const iframe = document.getElementById('gameIframe');
+  iframe.src = url;
+  document.getElementById('iframeContainer').classList.remove('hidden');
+}
+
+// ABRIR JOGO EXTERNO EM NOVA ABA
+function abrirJogoExterno(url) {
+  window.open(url, '_blank');
+}
+
+// === FUNÇÃO PARA CARREGAR MATERIAIS DO DRIVE (Teacher) ===
+const API_KEY = "AIzaSyBpdK2e9XfRgQdcf-cnx4nV1z6BaDeeYWM";
+const FOLDER_ID = "1pOe6fvSe6w08taSC3UnoOQnPUQAZcdw8";
+
+async function carregarPastas() {
+  try {
+    const todasPastas = await listarSubpastas(FOLDER_ID);
+
+    // Inclui subpastas da English
+    const english = todasPastas.find(p => /english/i.test(p.name));
+    if (english) {
+      const subPastasEnglish = await listarSubpastas(english.id);
+      todasPastas.push(...subPastasEnglish);
+    }
+
+    const novos = [];
+    const antigos = [];
+    const extras = [];
+
+    todasPastas.forEach(p => {
+      const nome = p.name;
+      const link = p.webViewLink;
+
+      if (/peic/i.test(nome) || /extra/i.test(nome)) {
+        extras.push({ nome, link });
+      } else if (/new|3rd/i.test(nome)) {
+        novos.push({ nome, link });
+      } else if (/answer|audio|english/i.test(nome)) {
+        extras.push({ nome, link });
+      } else {
+        antigos.push({ nome, link });
+      }
+    });
+
+    preencherLista("listaNovos", novos, "new");
+    preencherLista("listaAntigos", antigos, "old");
+    preencherLista("listaExtras", extras, "extra");
+
+  } catch(e) {
+    console.error("Erro ao carregar pastas:", e);
+    alert("Não foi possível carregar os materiais. Verifique se a pasta está pública.");
+  }
+}
+
+async function listarSubpastas(parentId) {
+  const url = `https://www.googleapis.com/drive/v3/files?q='${parentId}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&fields=files(id,name,webViewLink)&key=${API_KEY}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.files || [];
+}
+
+function preencherLista(id, lista, classe) {
+  const container = document.getElementById(id);
+  container.innerHTML = ""; // limpa antes de preencher
+  lista.sort((a,b) => a.nome.localeCompare(b.nome));
+  lista.forEach(p => {
+    const div = document.createElement("div");
+    div.className = `card ${classe}`;
+    div.innerHTML = `<a href="${p.link}" target="_blank">${p.nome}</a>`;
+    container.appendChild(div);
+  });
+}
+
+// Parar jogos quando a página for fechada
+window.addEventListener('beforeunload', function() {
+  pararJogo();
+});
+</script>
+
+</body>
+</html>
