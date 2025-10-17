@@ -209,7 +209,7 @@
   }
 
   .book-card.expanded .book-content {
-    max-height: 500px;
+    max-height: 800px; /* Aumentei para acomodar mais arquivos */
     opacity: 1;
     margin-top: 15px;
   }
@@ -219,7 +219,7 @@
     border-radius: 12px;
     padding: 15px;
     margin-top: 10px;
-    max-height: 400px;
+    max-height: 600px; /* Aumentei a altura máxima */
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
@@ -421,6 +421,20 @@
     font-size: 0.9em;
   }
 
+  /* Indicador de carregamento de mais arquivos */
+  .loading-more {
+    text-align: center;
+    padding: 15px;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    font-size: 0.9em;
+  }
+
+  .loading-more::after {
+    content: ' 📚 Carregando mais arquivos...';
+    animation: pulse 1.5s infinite;
+  }
+
   /* NOVO CSS PARA SETINHAS DE EXPANDIR/RECOLHER */
   .section-header {
     display: flex;
@@ -488,6 +502,8 @@
     .book-icon { font-size: 3em; }
     .book-title { font-size: 1.2em; }
     .section-header { flex-direction: column; gap: 10px; }
+    .book-card.expanded .book-content { max-height: 600px; }
+    .content-files { max-height: 500px; }
   }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -798,6 +814,58 @@ async function carregarConteudoPastaEnglish(englishFolderId) {
   }
 }
 
+// NOVA FUNÇÃO: Carregar TODOS os arquivos de uma pasta com paginação
+async function carregarTodosArquivosPasta(pastaId) {
+  let todosArquivos = [];
+  let nextPageToken = null;
+  
+  try {
+    do {
+      // Construir URL com paginação
+      let url = `https://www.googleapis.com/drive/v3/files?q='${pastaId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink),nextPageToken&orderBy=name&pageSize=1000`;
+      
+      if (nextPageToken) {
+        url += `&pageToken=${nextPageToken}`;
+      }
+      
+      console.log(`Carregando página da pasta ${pastaId}...`);
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Adicionar arquivos da página atual
+      if (data.files && data.files.length > 0) {
+        const arquivosPagina = data.files.map(item => ({
+          id: item.id,
+          nome: item.name,
+          tipo: item.mimeType,
+          // Usar sempre o link de visualização para evitar download
+          link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
+        }));
+        
+        todosArquivos = todosArquivos.concat(arquivosPagina);
+        console.log(`Adicionados ${arquivosPagina.length} arquivos. Total: ${todosArquivos.length}`);
+      }
+      
+      // Verificar se há mais páginas
+      nextPageToken = data.nextPageToken || null;
+      
+    } while (nextPageToken);
+    
+    console.log(`Total de arquivos carregados da pasta ${pastaId}: ${todosArquivos.length}`);
+    return todosArquivos;
+    
+  } catch (error) {
+    console.error(`Erro ao carregar pasta ${pastaId}:`, error);
+    throw error;
+  }
+}
+
 // Função para carregar conteúdo de múltiplas pastas de uma vez
 async function carregarConteudoMultiplasPastas(pastaIds) {
   try {
@@ -811,23 +879,8 @@ async function carregarConteudoMultiplasPastas(pastaIds) {
       }
       
       try {
-        const url = `https://www.googleapis.com/drive/v3/files?q='${pastaId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink)&orderBy=name&pageSize=50`;
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          throw new Error(`Erro HTTP: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        const conteudo = data.files ? data.files.map(item => ({
-          id: item.id,
-          nome: item.name,
-          tipo: item.mimeType,
-          // CORREÇÃO: Usar sempre o link de visualização para PDFs
-          link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
-        })) : [];
+        // Usar a nova função com paginação
+        const conteudo = await carregarTodosArquivosPasta(pastaId);
         
         // Salvar no cache
         cacheConteudo.set(pastaId, conteudo);
@@ -1016,24 +1069,11 @@ async function carregarConteudoLivro(pastaId, containerDiv) {
       return;
     }
     
-    // Buscar conteúdo da pasta
-    const url = `https://www.googleapis.com/drive/v3/files?q='${pastaId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink)&orderBy=name&pageSize=50`;
+    // Mostrar indicador de carregamento
+    containerDiv.innerHTML = '<div class="loading-more">Carregando todos os arquivos...</div>';
     
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    let arquivos = data.files ? data.files.map(item => ({
-      id: item.id,
-      nome: item.name,
-      tipo: item.mimeType,
-      // CORREÇÃO: Usar sempre o link de visualização para evitar download
-      link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
-    })) : [];
+    // Usar a nova função com paginação para carregar TODOS os arquivos
+    let arquivos = await carregarTodosArquivosPasta(pastaId);
     
     // ORDENAR OS ARQUIVOS NUMERICAMENTE
     arquivos = ordenarArquivosNumericamente(arquivos);
@@ -1058,6 +1098,11 @@ function exibirConteudo(arquivos, containerDiv) {
   }
   
   let html = '<div class="content-files">';
+  
+  // Adicionar contador de arquivos
+  html += `<div style="text-align: center; padding: 10px; color: rgba(255,255,255,0.7); font-size: 0.9em;">
+            📚 Total de ${arquivos.length} arquivos
+          </div>`;
   
   arquivos.forEach(arquivo => {
     const icon = getFileIcon(arquivo.tipo);
