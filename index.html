@@ -421,6 +421,63 @@
     font-size: 0.9em;
   }
 
+  /* NOVO CSS PARA SETINHAS DE EXPANDIR/RECOLHER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 30px auto;
+    max-width: 500px;
+  }
+
+  .section-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .section-header h2 {
+    margin: 0;
+    transition: all 0.3s ease;
+  }
+
+  .section-header:hover h2 {
+    transform: scale(1.02);
+  }
+
+  .toggle-icon {
+    font-size: 1.8em;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 5px;
+  }
+
+  .section-header:hover .toggle-icon {
+    color: #ffffff;
+    transform: scale(1.2);
+  }
+
+  /* ALTERAÇÃO: Seções começam retraídas por padrão */
+  .book-section {
+    /* Inicia com as seções retraídas */
+  }
+
+  .section-collapsed .toggle-icon {
+    transform: rotate(-90deg);
+  }
+
+  .section-collapsed .container {
+    display: none;
+  }
+
+  .section-collapsed h2::after {
+    width: 120px;
+    background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+  }
+
   @media (max-width: 768px) {
     h1 { font-size: 2.5em; }
     .container { grid-template-columns: 1fr; gap: 20px; padding: 10px; }
@@ -430,6 +487,7 @@
     .book-card { padding: 25px 20px; min-height: 160px; }
     .book-icon { font-size: 3em; }
     .book-title { font-size: 1.2em; }
+    .section-header { flex-direction: column; gap: 10px; }
   }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -449,19 +507,37 @@
 <div id="teacher" class="section">
   <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
 
-  <h2>📗 Livros Novos</h2>
-  <div class="container" id="listaNovos">
-    <div class="loading">Carregando materiais mágicos...</div>
+  <!-- Seção Livros Novos com setinha -->
+  <div id="secaoNovos" class="book-section section-collapsed">
+    <div class="section-header" onclick="alternarSecao('novos')">
+      <h2>📗 Livros Novos</h2>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="container" id="listaNovos">
+      <div class="loading">Carregando materiais mágicos...</div>
+    </div>
   </div>
 
-  <h2>📕 Livros Antigos</h2>
-  <div class="container" id="listaAntigos">
-    <div class="loading">Carregando materiais mágicos...</div>
+  <!-- Seção Livros Antigos com setinha -->
+  <div id="secaoAntigos" class="book-section section-collapsed">
+    <div class="section-header" onclick="alternarSecao('antigos')">
+      <h2>📕 Livros Antigos</h2>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="container" id="listaAntigos">
+      <div class="loading">Carregando materiais mágicos...</div>
+    </div>
   </div>
 
-  <h2>📘 Materiais Extras</h2>
-  <div class="container" id="listaExtras">
-    <div class="loading">Carregando materiais mágicos...</div>
+  <!-- Seção Materiais Extras com setinha -->
+  <div id="secaoExtras" class="book-section section-collapsed">
+    <div class="section-header" onclick="alternarSecao('extras')">
+      <h2>📘 Materiais Extras</h2>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="container" id="listaExtras">
+      <div class="loading">Carregando materiais mágicos...</div>
+    </div>
   </div>
 </div>
 
@@ -526,6 +602,13 @@ const SENHA = "2020";
 // CACHE PARA CONTEÚDO JÁ CARREGADO
 const cacheConteudo = new Map();
 const cacheLivros = new Map();
+
+// ALTERAÇÃO: Todas as seções começam retraídas
+let secoesExpandidas = {
+  novos: false,  // Alterado para false
+  antigos: false, // Alterado para false
+  extras: false  // Alterado para false
+};
 
 // ABRIR SEÇÃO COM OU SEM SENHA
 function abrirSecao(secao) {
@@ -600,6 +683,21 @@ function abrirJogo(url) {
 // ABRIR JOGO EXTERNO EM NOVA ABA
 function abrirJogoExterno(url) {
   window.open(url, '_blank');
+}
+
+// === NOVAS FUNÇÕES PARA EXPANDIR/RECOLHER SEÇÕES COM SETINHAS ===
+
+// Alternar uma seção específica
+function alternarSecao(tipo) {
+  const secao = document.getElementById(`secao${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
+  
+  if (secoesExpandidas[tipo]) {
+    secao.classList.add('section-collapsed');
+    secoesExpandidas[tipo] = false;
+  } else {
+    secao.classList.remove('section-collapsed');
+    secoesExpandidas[tipo] = true;
+  }
 }
 
 // === FUNÇÃO PARA CARREGAR MATERIAIS DO DRIVE (Teacher) ===
@@ -832,12 +930,9 @@ function getBookIcon(nomeLivro) {
   if (nome.includes('history') || nome.includes('história')) return '📜';
   if (nome.includes('art') || nome.includes('arte')) return '🎨';
   if (nome.includes('music') || nome.includes('música')) return '🎵';
-  if (nome.includes('workbook')) return '📚';
+  if (nome.includes('workbook')) return '📝';
   if (nome.includes('audio')) return '🎧';
-  if (nome.includes('answer')) return '🔑';
-  if (nome.includes('teens')) return '📝';
-  if (nome.includes('checking')) return '✅';
-  if (nome.includes('w10') || nome.includes('w2')) return '📚';
+  if (nome.includes('answer')) return '✅';
   return '📚';
 }
 
@@ -851,52 +946,36 @@ function getBadgeText(classificacao) {
   }
 }
 
-// Função para classificar um item individual (CORRIGIDA - VERSÃO FINAL)
+// Função para classificar um item individual
 function classificarItem(item) {
   const nome = item.nome.toLowerCase();
   
-  // CRITÉRIOS CORRIGIDOS - VERSÃO FINAL:
-  if (nome.includes('new') || nome.includes('3rd')) {
-    return 'new';
-  }
-  else if (nome.includes('audio') || 
-           nome.includes('answer') || 
-           nome.includes('checking') ||
-           nome.includes('peic') ||
-           nome.includes('extra activities') ||
-           nome.includes('material')) {
-    return 'extra';
-  }
-  else {
-    return 'old';
+  if (nome.includes('new') || nome.includes('3rd')) return 'new';
+  if (nome.includes('audio') || 
+      nome.includes('answer') || 
+      nome.includes('checking') ||
+      nome.includes('peic') ||
+      nome.includes('extra activities') ||
+      nome.includes('material')) return 'extra';
+  
+  return 'old';
+}
+
+// Função para alternar expansão de um livro
+async function alternarLivro(elemento, pastaId) {
+  elemento.classList.toggle('expanded');
+  
+  const conteudoDiv = elemento.querySelector('.book-content');
+  const loadingDiv = conteudoDiv.querySelector('.quick-loading');
+  
+  // Se está expandindo e ainda não carregou o conteúdo
+  if (elemento.classList.contains('expanded') && loadingDiv) {
+    await carregarConteudoLivro(pastaId, conteudoDiv);
   }
 }
 
-// Função para criar elemento de arquivo (CORRIGIDA - ABRE PDF NO VIEWER)
-function criarElementoArquivo(arquivo) {
-  const isPDF = arquivo.nome.toLowerCase().endsWith('.pdf');
-  const icon = isPDF ? '📄' : '📎';
-  const iconClass = isPDF ? 'pdf-icon' : '';
-  
-  // CORREÇÃO: Para PDFs, usar o link de visualização em vez de download
-  let link = arquivo.link;
-  if (isPDF && arquivo.id) {
-    // Usar o link de visualização do Google Drive para PDFs
-    link = `https://drive.google.com/file/d/${arquivo.id}/view`;
-  }
-  
-  return `
-    <div class="file-item">
-      <a href="${link}" target="_blank" rel="noopener">
-        <span class="file-icon ${iconClass}">${icon}</span>
-        ${arquivo.nome}
-      </a>
-    </div>
-  `;
-}
-
-// Função para ordenar arquivos numericamente
-function ordenarArquivos(arquivos) {
+// NOVA FUNÇÃO: Ordenar arquivos numericamente
+function ordenarArquivosNumericamente(arquivos) {
   return arquivos.sort((a, b) => {
     // Extrair números dos nomes dos arquivos
     const numA = extrairNumero(a.nome);
@@ -916,168 +995,151 @@ function ordenarArquivos(arquivos) {
   });
 }
 
-// Função auxiliar para extrair números dos nomes dos arquivos
+// FUNÇÃO AUXILIAR: Extrair número do nome do arquivo
 function extrairNumero(nome) {
+  // Procura por números no formato: Lesson 1, Unit 2, Chapter 3, etc.
   const match = nome.match(/(\d+)/);
   return match ? parseInt(match[1]) : null;
 }
 
-// Função para alternar livro e carregar conteúdo - OTIMIZADA
-async function alternarLivro(elemento, livroId) {
-  const conteudo = elemento.querySelector('.book-content');
-  const indicador = elemento.querySelector('.expand-indicator');
-  
-  if (elemento.classList.contains('expanded')) {
-    // Colapsar
-    elemento.classList.remove('expanded');
-    indicador.innerHTML = '▼ Clique para expandir ▼';
-  } else {
-    // Expandir
-    elemento.classList.add('expanded');
-    indicador.innerHTML = '▲ Clique para colapsar ▲';
+// Função para carregar conteúdo de um livro específico
+async function carregarConteudoLivro(pastaId, containerDiv) {
+  try {
+    console.log(`Carregando conteúdo da pasta ${pastaId}...`);
     
-    // Verificar se já temos o conteúdo em cache
-    if (cacheConteudo.has(livroId)) {
-      const conteudoCache = cacheConteudo.get(livroId);
-      exibirConteudoLivro(conteudo, conteudoCache);
-    } else {
-      // Carregar conteúdo individualmente (fallback)
-      conteudo.innerHTML = '<div class="quick-loading">Carregando rapidamente...</div>';
-      
-      try {
-        const url = `https://www.googleapis.com/drive/v3/files?q='${livroId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink)&orderBy=name&pageSize=50`;
-        
-        const response = await fetch(url);
-        
-        if (response.ok) {
-          const data = await response.json();
-          let conteudoLivro = data.files ? data.files.map(item => ({
-            id: item.id,
-            nome: item.name,
-            tipo: item.mimeType,
-            link: item.webContentLink || item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
-          })) : [];
-          
-          // CORREÇÃO: Ordenar os arquivos numericamente
-          conteudoLivro = ordenarArquivos(conteudoLivro);
-          
-          // Salvar no cache
-          cacheConteudo.set(livroId, conteudoLivro);
-          exibirConteudoLivro(conteudo, conteudoLivro);
-        } else {
-          throw new Error(`Erro HTTP: ${response.status}`);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar conteúdo:', error);
-        conteudo.innerHTML = `
-          <div class="error">
-            Erro ao carregar conteúdo
-            <br><small>Tente novamente</small>
-          </div>
-        `;
-      }
+    // Verificar se já temos no cache
+    if (cacheConteudo.has(pastaId)) {
+      console.log(`Usando cache para pasta ${pastaId}`);
+      const arquivosOrdenados = ordenarArquivosNumericamente(cacheConteudo.get(pastaId));
+      exibirConteudo(arquivosOrdenados, containerDiv);
+      return;
     }
+    
+    // Buscar conteúdo da pasta
+    const url = `https://www.googleapis.com/drive/v3/files?q='${pastaId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink)&orderBy=name&pageSize=50`;
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    let arquivos = data.files ? data.files.map(item => ({
+      id: item.id,
+      nome: item.name,
+      tipo: item.mimeType,
+      link: item.webContentLink || item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
+    })) : [];
+    
+    // ORDENAR OS ARQUIVOS NUMERICAMENTE
+    arquivos = ordenarArquivosNumericamente(arquivos);
+    
+    // Salvar no cache
+    cacheConteudo.set(pastaId, arquivos);
+    
+    // Exibir conteúdo
+    exibirConteudo(arquivos, containerDiv);
+    
+  } catch (error) {
+    console.error(`Erro ao carregar conteúdo da pasta ${pastaId}:`, error);
+    containerDiv.innerHTML = `<div class="error">Erro ao carregar conteúdo: ${error.message}</div>`;
   }
 }
 
-// Função auxiliar para exibir conteúdo do livro (COM SCROLL E ORDENAÇÃO)
-function exibirConteudoLivro(container, conteudoLivro) {
-  if (conteudoLivro.length === 0) {
-    container.innerHTML = '<div class="empty-folder">Nenhum arquivo encontrado</div>';
-  } else {
-    let html = '<div class="content-files">';
-    
-    // Mostrar TODOS os arquivos com scroll (já ordenados)
-    conteudoLivro.forEach(item => {
-      if (item.tipo === 'application/vnd.google-apps.folder') {
-        html += `
-          <div class="file-item">
-            <a href="${item.link}" target="_blank" rel="noopener">
-              <span class="file-icon">📁</span>
-              ${item.nome} (Pasta)
-            </a>
-          </div>
-        `;
-      } else {
-        html += criarElementoArquivo(item);
-      }
-    });
-    
-    html += '</div>';
-    container.innerHTML = html;
+// Função para exibir conteúdo na interface
+function exibirConteudo(arquivos, containerDiv) {
+  if (!arquivos || arquivos.length === 0) {
+    containerDiv.innerHTML = '<div class="empty-folder">Nenhum arquivo encontrado</div>';
+    return;
   }
+  
+  let html = '<div class="content-files">';
+  
+  arquivos.forEach(arquivo => {
+    const icon = getFileIcon(arquivo.tipo);
+    html += `
+      <div class="file-item">
+        <a href="${arquivo.link}" target="_blank" rel="noopener">
+          <span class="file-icon ${icon.class}">${icon.symbol}</span>
+          ${arquivo.nome}
+        </a>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  containerDiv.innerHTML = html;
 }
 
-// Função principal para carregar pastas - AGORA INCLUI CONTEÚDO DA PASTA ENGLISH
+// Função para obter ícone baseado no tipo de arquivo
+function getFileIcon(mimeType) {
+  if (mimeType.includes('pdf')) return { symbol: '📄', class: 'pdf-icon' };
+  if (mimeType.includes('document')) return { symbol: '📝', class: '' };
+  if (mimeType.includes('spreadsheet')) return { symbol: '📊', class: '' };
+  if (mimeType.includes('presentation')) return { symbol: '📽️', class: '' };
+  if (mimeType.includes('image')) return { symbol: '🖼️', class: '' };
+  if (mimeType.includes('audio')) return { symbol: '🎵', class: '' };
+  if (mimeType.includes('video')) return { symbol: '🎬', class: '' };
+  if (mimeType.includes('folder')) return { symbol: '📁', class: '' };
+  return { symbol: '📎', class: '' };
+}
+
+// FUNÇÃO PRINCIPAL PARA CARREGAR TODOS OS MATERIAIS
 async function carregarPastas() {
   try {
-    console.log('Iniciando carregamento otimizado de pastas...');
+    console.log('Iniciando carregamento de pastas...');
     
-    // Mostrar indicador de carregamento
-    ['listaNovos', 'listaAntigos', 'listaExtras'].forEach(id => {
-      document.getElementById(id).innerHTML = '<div class="loading">Carregando livros do Drive...</div>';
-    });
+    // Buscar todas as pastas principais
+    const pastasPrincipais = await listarPastasPrincipais();
     
-    // Buscar todas as pastas principais (incluindo conteúdo da pasta English)
-    const todasPastas = await listarPastasPrincipais();
-    
-    if (!todasPastas || todasPastas.length === 0) {
-      throw new Error('Não foi possível carregar os livros ou a pasta está vazia');
+    if (pastasPrincipais.length === 0) {
+      document.getElementById('listaNovos').innerHTML = '<div class="error">Nenhuma pasta encontrada no Drive</div>';
+      document.getElementById('listaAntigos').innerHTML = '<div class="error">Nenhuma pasta encontrada no Drive</div>';
+      document.getElementById('listaExtras').innerHTML = '<div class="error">Nenhuma pasta encontrada no Drive</div>';
+      return;
     }
     
-    console.log('Todas as pastas carregadas:', todasPastas);
+    console.log(`Processando ${pastasPrincipais.length} pastas...`);
     
-    // Classificar os livros (agora incluindo os da pasta English)
-    const { novos, antigos, extras } = classificarLivros(todasPastas);
+    // Classificar os livros
+    const { novos, antigos, extras } = classificarLivros(pastasPrincipais);
     
-    console.log(`Classificado: ${novos.length} novos, ${antigos.length} antigos, ${extras.length} extras`);
+    console.log(`Classificação: ${novos.length} novos, ${antigos.length} antigos, ${extras.length} extras`);
     
-    // Criar HTML para cada categoria
-    criarEstruturaHTML(novos, 'listaNovos', 'Livros Novos');
-    criarEstruturaHTML(antigos, 'listaAntigos', 'Livros Antigos');
-    criarEstruturaHTML(extras, 'listaExtras', 'Materiais Extras');
+    // Criar estrutura HTML para cada categoria
+    criarEstruturaHTML(novos, 'listaNovos', 'Novos');
+    criarEstruturaHTML(antigos, 'listaAntigos', 'Antigos');
+    criarEstruturaHTML(extras, 'listaExtras', 'Extras');
     
-    // Pré-carregar conteúdo das pastas mais populares em segundo plano
+    // Carregar conteúdo das pastas em background para melhor performance
+    const todasPastasIds = [...novos, ...antigos, ...extras].map(pasta => pasta.id);
+    console.log(`Carregando conteúdo de ${todasPastasIds.length} pastas em background...`);
+    
+    // Carregar em background sem bloquear a interface
     setTimeout(() => {
-      const pastasParaPrecarregar = [
-        ...novos.slice(0, 3).map(l => l.id),
-        ...antigos.slice(0, 2).map(l => l.id),
-        ...extras.slice(0, 2).map(l => l.id)
-      ];
-      
-      if (pastasParaPrecarregar.length > 0) {
-        console.log('Pré-carregando conteúdo das pastas mais usadas...');
-        carregarConteudoMultiplasPastas(pastasParaPrecarregar);
-      }
+      carregarConteudoMultiplasPastas(todasPastasIds)
+        .then(() => console.log('Conteúdo carregado em background'))
+        .catch(err => console.error('Erro no carregamento em background:', err));
     }, 1000);
     
   } catch (error) {
     console.error('Erro ao carregar pastas:', error);
     
-    const errorHTML = `
-      <div class="error">
-        <p>Erro ao carregar livros:</p>
-        <p>${error.message}</p>
-        <p>Verifique:</p>
-        <ul style="text-align: left; margin: 10px 0;">
-          <li>Se a pasta do Drive está pública</li>
-          <li>Sua conexão com a internet</li>
-          <li>Se a API Key está correta</li>
-        </ul>
-      </div>
-    `;
-    
-    ['listaNovos', 'listaAntigos', 'listaExtras'].forEach(id => {
-      document.getElementById(id).innerHTML = errorHTML;
-    });
+    // Exibir erros específicos em cada container
+    const errorMsg = `<div class="error">Erro ao carregar: ${error.message}</div>`;
+    document.getElementById('listaNovos').innerHTML = errorMsg;
+    document.getElementById('listaAntigos').innerHTML = errorMsg;
+    document.getElementById('listaExtras').innerHTML = errorMsg;
   }
 }
 
-// Parar jogos quando a página for fechada
-window.addEventListener('beforeunload', function() {
-  pararJogo();
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Portal Educacional inicializado');
+  // As seções já começam retraídas por padrão devido à classe section-collapsed no HTML
 });
 </script>
-
 </body>
 </html>
