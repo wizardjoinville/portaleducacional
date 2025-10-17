@@ -825,7 +825,8 @@ async function carregarConteudoMultiplasPastas(pastaIds) {
           id: item.id,
           nome: item.name,
           tipo: item.mimeType,
-          link: item.webContentLink || item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
+          // CORREÇÃO: Usar sempre o link de visualização para PDFs
+          link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
         })) : [];
         
         // Salvar no cache
@@ -1030,7 +1031,8 @@ async function carregarConteudoLivro(pastaId, containerDiv) {
       id: item.id,
       nome: item.name,
       tipo: item.mimeType,
-      link: item.webContentLink || item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
+      // CORREÇÃO: Usar sempre o link de visualização para evitar download
+      link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
     })) : [];
     
     // ORDENAR OS ARQUIVOS NUMERICAMENTE
