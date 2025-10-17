@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal Educacional</title>
 <style>
-  /* [MANTENHA TODO O CSS ANTERIOR IGUAL] */
   body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -74,7 +73,6 @@
     margin-bottom: 30px;
   }
 
-  /* Botão parar jogo - destaque vermelho */
   .stop-btn {
     background: rgba(220, 53, 69, 0.3);
     border: 2px solid rgba(220, 53, 69, 0.5);
@@ -97,7 +95,7 @@
     padding: 20px;
   }
 
-  /* CARDS ESTILIZADOS PARA LIVROS */
+  /* CARDS PARA LIVROS */
   .book-card {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
     border-radius: 20px;
@@ -209,7 +207,7 @@
   }
 
   .book-card.expanded .book-content {
-    max-height: 800px; /* Aumentei para acomodar mais arquivos */
+    max-height: 800px;
     opacity: 1;
     margin-top: 15px;
   }
@@ -219,13 +217,12 @@
     border-radius: 12px;
     padding: 15px;
     margin-top: 10px;
-    max-height: 600px; /* Aumentei a altura máxima */
+    max-height: 600px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
   }
 
-  /* Custom scrollbar para Webkit browsers */
   .content-files::-webkit-scrollbar {
     width: 8px;
   }
@@ -297,37 +294,87 @@
     color: #00f3ff;
   }
 
+  /* ESTILOS PARA OS CARDS DE GAMES */
   .game-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
     margin-top: 30px;
+    padding: 20px;
   }
 
   .game-card {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-    padding: 20px;
+    padding: 0;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .game-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 15px 45px rgba(31, 38, 135, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
   }
 
-  .game-card img {
+  .game-image-container {
     width: 100%;
-    border-radius: 15px;
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .game-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s ease;
   }
 
-  .game-card:hover img {
+  .game-card:hover .game-image {
     transform: scale(1.05);
+  }
+
+  .game-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .game-title {
+    font-size: 1.3em;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .game-description {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .image-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    font-size: 3em;
   }
 
   iframe {
@@ -362,7 +409,6 @@
 
   .hidden { display: none; }
 
-  /* Container do iframe com botão parar */
   .iframe-container {
     position: relative;
     margin-top: 30px;
@@ -413,7 +459,6 @@
     margin: 10px 0;
   }
 
-  /* Loading rápido para conteúdo */
   .quick-loading {
     text-align: center;
     padding: 10px;
@@ -421,7 +466,6 @@
     font-size: 0.9em;
   }
 
-  /* Indicador de carregamento de mais arquivos */
   .loading-more {
     text-align: center;
     padding: 15px;
@@ -435,7 +479,7 @@
     animation: pulse 1.5s infinite;
   }
 
-  /* NOVO CSS PARA SETINHAS DE EXPANDIR/RECOLHER */
+  /* SETINHAS DE EXPANDIR/RECOLHER */
   .section-header {
     display: flex;
     align-items: center;
@@ -472,11 +516,6 @@
   .section-header:hover .toggle-icon {
     color: #ffffff;
     transform: scale(1.2);
-  }
-
-  /* ALTERAÇÃO: Seções começam retraídas por padrão */
-  .book-section {
-    /* Inicia com as seções retraídas */
   }
 
   .section-collapsed .toggle-icon {
@@ -577,21 +616,52 @@
   <div id="games" class="hidden">
     <h2>Escolha um jogo para começar:</h2>
     <div class="game-list">
+      <!-- Games to Learn English -->
       <div class="game-card" onclick="abrirJogo('https://www.gamestolearnenglish.com/')">
-        <img src="https://www.gamestolearnenglish.com/wp-content/uploads/2021/07/screenshot-homepage.png" alt="Games to Learn English">
-        <p><strong>Games to Learn English</strong></p>
+        <div class="game-image-container">
+          <img src="./english-games.png" alt="Games to Learn English" class="game-image" 
+               onerror="handleImageError(this, '🌍')">
+        </div>
+        <div class="game-content">
+          <h3 class="game-title">Games to Learn English</h3>
+          <p class="game-description">Jogos divertidos para praticar inglês de forma interativa</p>
+        </div>
       </div>
+
+      <!-- FoodGuessr -->
       <div class="game-card" onclick="abrirJogoExterno('https://www.foodguessr.com/game/daily')">
-        <img src="https://www.foodguessr.com/images/og-image.jpg" alt="FoodGuessr">
-        <p><strong>FoodGuessr</strong></p>
+        <div class="game-image-container">
+          <img src="./foodguessr.jpg" alt="FoodGuessr" class="game-image"
+               onerror="handleImageError(this, '🍕')">
+        </div>
+        <div class="game-content">
+          <h3 class="game-title">FoodGuessr</h3>
+          <p class="game-description">Adivinhe comidas de diferentes países pelo mundo</p>
+        </div>
       </div>
+
+      <!-- Gartic Phone -->
       <div class="game-card" onclick="abrirJogoExterno('https://garticphone.com/en')">
-        <img src="https://garticphone.com/images/share.png" alt="Gartic Phone">
-        <p><strong>Gartic Phone</strong></p>
+        <div class="game-image-container">
+          <img src="./gartic-phone.jpg" alt="Gartic Phone" class="game-image"
+               onerror="handleImageError(this, '📱')">
+        </div>
+        <div class="game-content">
+          <h3 class="game-title">Gartic Phone</h3>
+          <p class="game-description">Desenhe e adivinhe com seus amigos online</p>
+        </div>
       </div>
+
+      <!-- ZType -->
       <div class="game-card" onclick="abrirJogo('https://zty.pe/')">
-        <img src="https://zty.pe/images/ztype.png" alt="ZType">
-        <p><strong>ZType - Typing Game</strong></p>
+        <div class="game-image-container">
+          <img src="./ztype.png" alt="ZType" class="game-image"
+               onerror="handleImageError(this, '⌨️')">
+        </div>
+        <div class="game-content">
+          <h3 class="game-title">ZType - Typing Game</h3>
+          <p class="game-description">Melhore sua digitação destruindo palavras com tiros</p>
+        </div>
       </div>
     </div>
     
@@ -613,6 +683,15 @@
 </div>
 
 <script>
+// FUNÇÃO PARA LIDAR COM ERROS DE IMAGEM
+function handleImageError(imgElement, fallbackEmoji) {
+  console.log(`Imagem ${imgElement.src} não encontrada, usando fallback: ${fallbackEmoji}`);
+  
+  // Substituir a imagem por um fallback com emoji
+  const container = imgElement.parentElement;
+  container.innerHTML = `<div class="image-fallback">${fallbackEmoji}</div>`;
+}
+
 const SENHA = "2020";
 
 // CACHE PARA CONTEÚDO JÁ CARREGADO
@@ -621,9 +700,9 @@ const cacheLivros = new Map();
 
 // ALTERAÇÃO: Todas as seções começam retraídas
 let secoesExpandidas = {
-  novos: false,  // Alterado para false
-  antigos: false, // Alterado para false
-  extras: false  // Alterado para false
+  novos: false,
+  antigos: false,
+  extras: false
 };
 
 // ABRIR SEÇÃO COM OU SEM SENHA
@@ -658,7 +737,7 @@ function voltarParaGames() {
   document.getElementById('iframeContainer').classList.add('hidden');
 }
 
-// PARAR JOGO COMPLETAMENTE - Esta função para realmente o jogo
+// PARAR JOGO COMPLETAMENTE
 function pararJogo() {
   const iframe = document.getElementById('gameIframe');
   
@@ -701,9 +780,7 @@ function abrirJogoExterno(url) {
   window.open(url, '_blank');
 }
 
-// === NOVAS FUNÇÕES PARA EXPANDIR/RECOLHER SEÇÕES COM SETINHAS ===
-
-// Alternar uma seção específica
+// FUNÇÕES PARA EXPANDIR/RECOLHER SEÇÕES
 function alternarSecao(tipo) {
   const secao = document.getElementById(`secao${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
   
@@ -716,19 +793,16 @@ function alternarSecao(tipo) {
   }
 }
 
-// === FUNÇÃO PARA CARREGAR MATERIAIS DO DRIVE (Teacher) ===
+// FUNÇÕES DO DRIVE
 const API_KEY = "AIzaSyBpdK2e9XfRgQdcf-cnx4nV1z6BaDeeYWM";
 const FOLDER_ID = "1pOe6fvSe6w08taSC3UnoOQnPUQAZcdw8";
-
-// ID da pasta English para processamento especial
 const ENGLISH_FOLDER_NAME = "English";
 
-// Função para listar TODAS as pastas principais e processar a pasta English
+// Função para listar TODAS as pastas principais
 async function listarPastasPrincipais() {
   try {
     console.log('Buscando pastas principais...');
     
-    // Buscar todas as pastas no nível principal
     const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink)&orderBy=name`;
     
     const response = await fetch(url);
@@ -746,17 +820,14 @@ async function listarPastasPrincipais() {
     
     console.log(`Encontradas ${data.files.length} pastas principais`);
     
-    // Processar todas as pastas
     const todasPastas = [];
     
     for (const item of data.files) {
       if (item.name === ENGLISH_FOLDER_NAME) {
-        // Se for a pasta English, buscar seu conteúdo interno
         console.log('Encontrada pasta English, processando conteúdo interno...');
         const conteudoEnglish = await carregarConteudoPastaEnglish(item.id);
         todasPastas.push(...conteudoEnglish);
       } else {
-        // Para outras pastas, adicionar normalmente
         todasPastas.push({
           id: item.id,
           nome: item.name,
@@ -796,10 +867,9 @@ async function carregarConteudoPastaEnglish(englishFolderId) {
       return [];
     }
     
-    // Processar cada item dentro da pasta English
     const itensEnglish = data.files.map(item => ({
       id: item.id,
-      nome: item.name, // REMOVI o prefixo "English - " para ficar mais limpo
+      nome: item.name,
       tipo: item.mimeType,
       link: item.webViewLink,
       conteudo: null,
@@ -814,14 +884,13 @@ async function carregarConteudoPastaEnglish(englishFolderId) {
   }
 }
 
-// NOVA FUNÇÃO: Carregar TODOS os arquivos de uma pasta com paginação
+// Carregar TODOS os arquivos de uma pasta com paginação
 async function carregarTodosArquivosPasta(pastaId) {
   let todosArquivos = [];
   let nextPageToken = null;
   
   try {
     do {
-      // Construir URL com paginação
       let url = `https://www.googleapis.com/drive/v3/files?q='${pastaId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink),nextPageToken&orderBy=name&pageSize=1000`;
       
       if (nextPageToken) {
@@ -838,13 +907,11 @@ async function carregarTodosArquivosPasta(pastaId) {
       
       const data = await response.json();
       
-      // Adicionar arquivos da página atual
       if (data.files && data.files.length > 0) {
         const arquivosPagina = data.files.map(item => ({
           id: item.id,
           nome: item.name,
           tipo: item.mimeType,
-          // Usar sempre o link de visualização para evitar download
           link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
         }));
         
@@ -852,7 +919,6 @@ async function carregarTodosArquivosPasta(pastaId) {
         console.log(`Adicionados ${arquivosPagina.length} arquivos. Total: ${todosArquivos.length}`);
       }
       
-      // Verificar se há mais páginas
       nextPageToken = data.nextPageToken || null;
       
     } while (nextPageToken);
@@ -866,12 +932,11 @@ async function carregarTodosArquivosPasta(pastaId) {
   }
 }
 
-// Função para carregar conteúdo de múltiplas pastas de uma vez
+// Função para carregar conteúdo de múltiplas pastas
 async function carregarConteudoMultiplasPastas(pastaIds) {
   try {
     console.log(`Carregando conteúdo de ${pastaIds.length} pastas...`);
     
-    // Carregar todas as pastas em paralelo
     const promises = pastaIds.map(async (pastaId) => {
       if (cacheConteudo.has(pastaId)) {
         console.log(`Usando cache para pasta ${pastaId}`);
@@ -879,12 +944,8 @@ async function carregarConteudoMultiplasPastas(pastaIds) {
       }
       
       try {
-        // Usar a nova função com paginação
         const conteudo = await carregarTodosArquivosPasta(pastaId);
-        
-        // Salvar no cache
         cacheConteudo.set(pastaId, conteudo);
-        
         return { pastaId, conteudo };
       } catch (error) {
         console.error(`Erro ao carregar pasta ${pastaId}:`, error);
@@ -894,7 +955,6 @@ async function carregarConteudoMultiplasPastas(pastaIds) {
     
     const resultados = await Promise.allSettled(promises);
     
-    // Processar resultados
     const conteudos = {};
     resultados.forEach(resultado => {
       if (resultado.status === 'fulfilled') {
@@ -909,7 +969,7 @@ async function carregarConteudoMultiplasPastas(pastaIds) {
   }
 }
 
-// Função para classificar os livros (FILTRAGEM CORRIGIDA - VERSÃO FINAL)
+// Classificar os livros
 function classificarLivros(livros) {
   const novos = [];
   const antigos = [];
@@ -918,13 +978,9 @@ function classificarLivros(livros) {
   livros.forEach(livro => {
     const nome = livro.nome.toLowerCase();
     
-    // CRITÉRIOS CORRIGIDOS - VERSÃO FINAL:
-    
-    // 1. NOVOS: Apenas os que contém "new" ou "3rd" explicitamente
     if (nome.includes('new') || nome.includes('3rd')) {
       novos.push(livro);
     }
-    // 2. EXTRAS: Apenas materiais de apoio específicos
     else if (nome.includes('audio') || 
              nome.includes('answer') || 
              nome.includes('checking') ||
@@ -933,7 +989,6 @@ function classificarLivros(livros) {
              nome.includes('material')) {
       extras.push(livro);
     }
-    // 3. ANTIGOS: Todo o resto (incluindo W2, W10, Teens, etc.)
     else {
       antigos.push(livro);
     }
@@ -942,7 +997,7 @@ function classificarLivros(livros) {
   return { novos, antigos, extras };
 }
 
-// Função para criar HTML dos livros estilizados
+// Criar HTML dos livros
 function criarEstruturaHTML(livros, containerId, categoria) {
   const container = document.getElementById(containerId);
   
@@ -975,7 +1030,7 @@ function criarEstruturaHTML(livros, containerId, categoria) {
   container.innerHTML = html;
 }
 
-// Função para obter ícone baseado no nome do livro
+// Funções auxiliares
 function getBookIcon(nomeLivro) {
   const nome = nomeLivro.toLowerCase();
   if (nome.includes('english') || nome.includes('inglês')) return '🌍';
@@ -990,7 +1045,6 @@ function getBookIcon(nomeLivro) {
   return '📚';
 }
 
-// Função para obter texto do badge
 function getBadgeText(classificacao) {
   switch(classificacao) {
     case 'new': return 'Novo';
@@ -1000,7 +1054,6 @@ function getBadgeText(classificacao) {
   }
 }
 
-// Função para classificar um item individual
 function classificarItem(item) {
   const nome = item.nome.toLowerCase();
   
@@ -1015,53 +1068,45 @@ function classificarItem(item) {
   return 'old';
 }
 
-// Função para alternar expansão de um livro
+// Alternar expansão de um livro
 async function alternarLivro(elemento, pastaId) {
   elemento.classList.toggle('expanded');
   
   const conteudoDiv = elemento.querySelector('.book-content');
   const loadingDiv = conteudoDiv.querySelector('.quick-loading');
   
-  // Se está expandindo e ainda não carregou o conteúdo
   if (elemento.classList.contains('expanded') && loadingDiv) {
     await carregarConteudoLivro(pastaId, conteudoDiv);
   }
 }
 
-// NOVA FUNÇÃO: Ordenar arquivos numericamente
+// Ordenar arquivos numericamente
 function ordenarArquivosNumericamente(arquivos) {
   return arquivos.sort((a, b) => {
-    // Extrair números dos nomes dos arquivos
     const numA = extrairNumero(a.nome);
     const numB = extrairNumero(b.nome);
     
-    // Se ambos têm números, ordenar numericamente
     if (numA !== null && numB !== null) {
       return numA - numB;
     }
     
-    // Se apenas um tem número, o com número vem primeiro
     if (numA !== null && numB === null) return -1;
     if (numA === null && numB !== null) return 1;
     
-    // Se nenhum tem número, ordenar alfabeticamente
     return a.nome.localeCompare(b.nome);
   });
 }
 
-// FUNÇÃO AUXILIAR: Extrair número do nome do arquivo
 function extrairNumero(nome) {
-  // Procura por números no formato: Lesson 1, Unit 2, Chapter 3, etc.
   const match = nome.match(/(\d+)/);
   return match ? parseInt(match[1]) : null;
 }
 
-// Função para carregar conteúdo de um livro específico
+// Carregar conteúdo de um livro específico
 async function carregarConteudoLivro(pastaId, containerDiv) {
   try {
     console.log(`Carregando conteúdo da pasta ${pastaId}...`);
     
-    // Verificar se já temos no cache
     if (cacheConteudo.has(pastaId)) {
       console.log(`Usando cache para pasta ${pastaId}`);
       const arquivosOrdenados = ordenarArquivosNumericamente(cacheConteudo.get(pastaId));
@@ -1069,19 +1114,11 @@ async function carregarConteudoLivro(pastaId, containerDiv) {
       return;
     }
     
-    // Mostrar indicador de carregamento
     containerDiv.innerHTML = '<div class="loading-more">Carregando todos os arquivos...</div>';
     
-    // Usar a nova função com paginação para carregar TODOS os arquivos
     let arquivos = await carregarTodosArquivosPasta(pastaId);
-    
-    // ORDENAR OS ARQUIVOS NUMERICAMENTE
     arquivos = ordenarArquivosNumericamente(arquivos);
-    
-    // Salvar no cache
     cacheConteudo.set(pastaId, arquivos);
-    
-    // Exibir conteúdo
     exibirConteudo(arquivos, containerDiv);
     
   } catch (error) {
@@ -1090,7 +1127,7 @@ async function carregarConteudoLivro(pastaId, containerDiv) {
   }
 }
 
-// Função para exibir conteúdo na interface
+// Exibir conteúdo na interface
 function exibirConteudo(arquivos, containerDiv) {
   if (!arquivos || arquivos.length === 0) {
     containerDiv.innerHTML = '<div class="empty-folder">Nenhum arquivo encontrado</div>';
@@ -1099,7 +1136,6 @@ function exibirConteudo(arquivos, containerDiv) {
   
   let html = '<div class="content-files">';
   
-  // Adicionar contador de arquivos
   html += `<div style="text-align: center; padding: 10px; color: rgba(255,255,255,0.7); font-size: 0.9em;">
             📚 Total de ${arquivos.length} arquivos
           </div>`;
@@ -1120,7 +1156,6 @@ function exibirConteudo(arquivos, containerDiv) {
   containerDiv.innerHTML = html;
 }
 
-// Função para obter ícone baseado no tipo de arquivo
 function getFileIcon(mimeType) {
   if (mimeType.includes('pdf')) return { symbol: '📄', class: 'pdf-icon' };
   if (mimeType.includes('document')) return { symbol: '📝', class: '' };
@@ -1138,7 +1173,6 @@ async function carregarPastas() {
   try {
     console.log('Iniciando carregamento de pastas...');
     
-    // Buscar todas as pastas principais
     const pastasPrincipais = await listarPastasPrincipais();
     
     if (pastasPrincipais.length === 0) {
@@ -1150,21 +1184,17 @@ async function carregarPastas() {
     
     console.log(`Processando ${pastasPrincipais.length} pastas...`);
     
-    // Classificar os livros
     const { novos, antigos, extras } = classificarLivros(pastasPrincipais);
     
     console.log(`Classificação: ${novos.length} novos, ${antigos.length} antigos, ${extras.length} extras`);
     
-    // Criar estrutura HTML para cada categoria
     criarEstruturaHTML(novos, 'listaNovos', 'Novos');
     criarEstruturaHTML(antigos, 'listaAntigos', 'Antigos');
     criarEstruturaHTML(extras, 'listaExtras', 'Extras');
     
-    // Carregar conteúdo das pastas em background para melhor performance
     const todasPastasIds = [...novos, ...antigos, ...extras].map(pasta => pasta.id);
     console.log(`Carregando conteúdo de ${todasPastasIds.length} pastas em background...`);
     
-    // Carregar em background sem bloquear a interface
     setTimeout(() => {
       carregarConteudoMultiplasPastas(todasPastasIds)
         .then(() => console.log('Conteúdo carregado em background'))
@@ -1174,7 +1204,6 @@ async function carregarPastas() {
   } catch (error) {
     console.error('Erro ao carregar pastas:', error);
     
-    // Exibir erros específicos em cada container
     const errorMsg = `<div class="error">Erro ao carregar: ${error.message}</div>`;
     document.getElementById('listaNovos').innerHTML = errorMsg;
     document.getElementById('listaAntigos').innerHTML = errorMsg;
@@ -1185,7 +1214,6 @@ async function carregarPastas() {
 // Inicializar quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Portal Educacional inicializado');
-  // As seções já começam retraídas por padrão devido à classe section-collapsed no HTML
 });
 </script>
 </body>
