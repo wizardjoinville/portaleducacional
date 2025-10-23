@@ -313,43 +313,54 @@ function voltar() {
 function abrirSubSecao(id) {
     pararJogo();
     
-    document.getElementById('games').classList.add('hidden');
-    document.getElementById('extrasAlunos').classList.add('hidden');
-    document.getElementById('plataformasWizard').classList.add('hidden');
-    document.getElementById('iframeContainer').classList.add('hidden');
-    document.getElementById(id).classList.remove('hidden');
-
+    // Esconder todas as subseções
+    const subsecoes = ['games', 'extrasAlunos', 'plataformasWizard', 'iframeContainer'];
+    subsecoes.forEach(secao => {
+        const elemento = document.getElementById(secao);
+        if (elemento) elemento.classList.add('hidden');
+    });
+    
+    // Mostrar a subseção solicitada
+    const secaoAlvo = document.getElementById(id);
+    if (secaoAlvo) {
+        secaoAlvo.classList.remove('hidden');
+    }
+    
+    // Carregar conteúdo específico se necessário
     if (id === 'extrasAlunos') {
-        carregarExtrasAlunos(); // CARREGA AS ATIVIDADES EXTRAS
+        carregarExtrasAlunos();
     }
 
     if (id === 'plataformasWizard') {
         const plataformasContainer = document.getElementById('plataformasWizard');
-        plataformasContainer.innerHTML = `
-            <h2>🎯 Plataformas Wizard</h2>
-            <div class="extras-container">
-                <div class="plataformas-grid">
-                    <div class="plataforma-card">
-                        <img src="Catchup.png" alt="Catch Up" class="plataforma-img">
-                        <button onclick="window.open('https://me.wizard.com.br/catchup/#/catchup/classes/list', '_blank')" 
-                                class="catchup-button">
-                            Acessar Catch Up
-                        </button>
+        if (plataformasContainer) {
+            plataformasContainer.innerHTML = `
+                <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
+                <h2>🎯 Plataformas Wizard</h2>
+                <div class="extras-container">
+                    <div class="plataformas-grid">
+                        <div class="plataforma-card">
+                            <img src="Catchup.png" alt="Catch Up" class="plataforma-img">
+                            <button onclick="window.open('https://me.wizard.com.br/catchup/#/catchup/classes/list', '_blank')" 
+                                    class="catchup-button">
+                                Acessar Catch Up
+                            </button>
+                        </div>
+                        
+                        <div class="plataforma-card">
+                            <img src="Wizme.png" alt="Wizme" class="plataforma-img">
+                            <button onclick="window.open('https://app.newwizme.com.br/onboarding/profile', '_blank')" 
+                                    class="catchup-button">
+                                Acessar Wizme
+                            </button>
+                        </div>
                     </div>
-                    
-                    <div class="plataforma-card">
-                        <img src="Wizme.png" alt="Wizme" class="plataforma-img">
-                        <button onclick="window.open('https://app.newwizme.com.br/onboarding/profile', '_blank')" 
-                                class="catchup-button">
-                            Acessar Wizme
-                        </button>
-                    </div>
+                    <p style="text-align:center; color: rgba(255,255,255,0.7); margin-top: 20px;">
+                        Acesse as plataformas com seu usuário Wizard
+                    </p>
                 </div>
-                <p style="text-align:center; color: rgba(255,255,255,0.7); margin-top: 20px;">
-                    Acesse as plataformas com seu usuário Wizard
-                </p>
-            </div>
-        `;
+            `;
+        }
     }
 }
 
