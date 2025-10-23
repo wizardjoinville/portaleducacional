@@ -51,13 +51,13 @@
             </div>
         </div>
 
-        <!-- Kids Series Section - Added -->
-        <div class="section-header" onclick="alternarSecao('kids')">
-            <h2>👶 Kids Series</h2>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div id="secaoKids" class="section-collapsed">
-            <div id="listaKids" class="container">
+        <!-- Kids Series Section -->
+        <div id="secaoKids" class="book-section section-collapsed">
+            <div class="section-header" onclick="alternarSecao('kids')">
+                <h2>👶 Kids Series</h2>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="container" id="listaKids">
                 <div class="loading">Carregando materiais Kids...</div>
             </div>
         </div>
@@ -73,12 +73,12 @@
         </div>
 
         <!-- Nova seção de Outros Idiomas -->
-        <div class="section-header" onclick="alternarSecao('outrosIdiomas')">
-            <h2>🌍 Outros Idiomas</h2>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div id="secaoOutrosIdiomas" class="section-collapsed">
-            <div id="listaOutrosIdiomas" class="container">
+        <div id="secaoOutrosIdiomas" class="book-section section-collapsed">
+            <div class="section-header" onclick="alternarSecao('outrosIdiomas')">
+                <h2>🌍 Outros Idiomas</h2>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="container" id="listaOutrosIdiomas">
                 <div class="loading">Carregando outros idiomas...</div>
             </div>
         </div>
@@ -134,7 +134,7 @@
         </div>
 
         <!-- Plataformas Wizard -->
-        <div id="plataformasWizard" class="section hidden">
+        <div id="plataformasWizard" class="hidden">
             <!-- Conteúdo será preenchido dinamicamente pelo JavaScript -->
         </div>
     </div>
