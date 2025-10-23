@@ -1,1220 +1,145 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal Educacional</title>
-<style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    margin: 0;
-    padding: 40px 20px;
-    color: #ffffff;
-    text-align: center;
-    min-height: 100vh;
-  }
-
-  h1 {
-    color: #ffffff;
-    margin-bottom: 40px;
-    font-size: 3.5em;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    animation: fadeIn 1s ease-in;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .main-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
-    animation: slideUp 0.8s ease-out;
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  button {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    padding: 20px 35px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  }
-
-  button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-  }
-
-  .section {
-    display: none;
-    max-width: 1400px;
-    margin: 40px auto;
-    text-align: left;
-    animation: fadeIn 0.5s ease-out;
-  }
-
-  .back-btn {
-    background: rgba(0, 0, 0, 0.2);
-    margin-bottom: 30px;
-  }
-
-  .stop-btn {
-    background: rgba(220, 53, 69, 0.3);
-    border: 2px solid rgba(220, 53, 69, 0.5);
-    margin-top: 20px;
-    padding: 15px 30px;
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  .stop-btn:hover {
-    background: rgba(220, 53, 69, 0.5);
-    border: 2px solid rgba(220, 53, 69, 0.8);
-    transform: translateY(-3px);
-  }
-
-  .container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    padding: 20px;
-  }
-
-  /* CARDS PARA LIVROS */
-  .book-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
-    border-radius: 20px;
-    padding: 30px 25px;
-    text-align: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .book-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.6s;
-  }
-
-  .book-card:hover::before {
-    left: 100%;
-  }
-
-  .book-card:hover {
-    transform: translateY(-12px) scale(1.03);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-  }
-
-  .book-new {
-    border-top: 6px solid #4ade80;
-    background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(255, 255, 255, 0.05));
-  }
-
-  .book-old {
-    border-top: 6px solid #fbbf24;
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(255, 255, 255, 0.05));
-  }
-
-  .book-extra {
-    border-top: 6px solid #a855f7;
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(255, 255, 255, 0.05));
-  }
-
-  .book-icon {
-    font-size: 3.5em;
-    margin-bottom: 15px;
-    transition: all 0.3s ease;
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-  }
-
-  .book-card:hover .book-icon {
-    transform: scale(1.2) rotate(5deg);
-  }
-
-  .book-title {
-    font-size: 1.4em;
-    font-weight: 700;
-    margin: 0;
-    color: #ffffff;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    line-height: 1.3;
-  }
-
-  .book-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .badge-new {
-    background: linear-gradient(45deg, #4ade80, #22c55e);
-    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
-  }
-
-  .badge-old {
-    background: linear-gradient(45deg, #fbbf24, #f59e0b);
-    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
-  }
-
-  .badge-extra {
-    background: linear-gradient(45deg, #a855f7, #8b5cf6);
-    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
-  }
-
-  .book-content {
-    margin-top: 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.5s ease;
-    opacity: 0;
-    width: 100%;
-  }
-
-  .book-card.expanded .book-content {
-    max-height: 800px;
-    opacity: 1;
-    margin-top: 15px;
-  }
-
-  .content-files {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 10px;
-    max-height: 600px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
-  }
-
-  .content-files::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .content-files::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
-
-  .content-files::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-  }
-
-  .content-files::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-  }
-
-  .file-item {
-    margin: 8px 0;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
-    text-align: left;
-  }
-
-  .file-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-left: 3px solid #00f3ff;
-    transform: translateX(5px);
-  }
-
-  .file-item a {
-    color: #ffffff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    font-size: 0.95em;
-  }
-
-  .file-item a:hover {
-    color: #00f3ff;
-  }
-
-  .file-icon {
-    margin-right: 10px;
-    font-size: 1.2em;
-  }
-
-  .pdf-icon {
-    color: #ff6b6b;
-  }
-
-  .expand-indicator {
-    margin-top: 15px;
-    font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.7);
-    transition: all 0.3s ease;
-  }
-
-  .book-card:hover .expand-indicator {
-    color: #ffffff;
-  }
-
-  .book-card.expanded .expand-indicator {
-    transform: rotate(180deg);
-    color: #00f3ff;
-  }
-
-  /* ESTILOS PARA OS CARDS DE GAMES */
-  .game-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin-top: 30px;
-    padding: 20px;
-  }
-
-  .game-card {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-    padding: 0;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .game-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-  }
-
-  .game-image-container {
-    width: 100%;
-    height: 180px;
-    overflow: hidden;
-    position: relative;
-    border-radius: 20px 20px 0 0;
-  }
-
-  .game-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  .game-card:hover .game-image {
-    transform: scale(1.05);
-  }
-
-  .game-content {
-    padding: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .game-title {
-    font-size: 1.3em;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-    color: #ffffff;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  .game-description {
-    font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.8);
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .image-fallback {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    font-size: 3em;
-  }
-
-  iframe {
-    width: 100%;
-    height: 650px;
-    border: none;
-    border-radius: 20px;
-    margin-top: 30px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-  }
-
-  h2 {
-    color: #ffffff;
-    font-size: 2.5em;
-    margin: 50px 0 30px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-    position: relative;
-    display: inline-block;
-  }
-
-  h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, #00f3ff, transparent);
-    border-radius: 2px;
-  }
-
-  .hidden { display: none; }
-
-  .iframe-container {
-    position: relative;
-    margin-top: 30px;
-  }
-
-  .iframe-controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 15px;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 40px;
-    font-style: italic;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.1em;
-  }
-
-  .loading::after {
-    content: ' ✨';
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
-  .error {
-    text-align: center;
-    padding: 30px;
-    color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.1);
-    border-radius: 15px;
-    margin: 10px 0;
-    border: 1px solid rgba(255, 107, 107, 0.3);
-  }
-
-  .empty-folder {
-    text-align: center;
-    padding: 20px;
-    color: rgba(255, 255, 255, 0.5);
-    font-style: italic;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    margin: 10px 0;
-  }
-
-  .quick-loading {
-    text-align: center;
-    padding: 10px;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9em;
-  }
-
-  .loading-more {
-    text-align: center;
-    padding: 15px;
-    color: rgba(255, 255, 255, 0.6);
-    font-style: italic;
-    font-size: 0.9em;
-  }
-
-  .loading-more::after {
-    content: ' 📚 Carregando mais arquivos...';
-    animation: pulse 1.5s infinite;
-  }
-
-  /* SETINHAS DE EXPANDIR/RECOLHER */
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 10px 20px;
-    border-radius: 15px;
-    margin: 30px auto;
-    max-width: 500px;
-  }
-
-  .section-header:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .section-header h2 {
-    margin: 0;
-    transition: all 0.3s ease;
-  }
-
-  .section-header:hover h2 {
-    transform: scale(1.02);
-  }
-
-  .toggle-icon {
-    font-size: 1.8em;
-    transition: all 0.3s ease;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 5px;
-  }
-
-  .section-header:hover .toggle-icon {
-    color: #ffffff;
-    transform: scale(1.2);
-  }
-
-  .section-collapsed .toggle-icon {
-    transform: rotate(-90deg);
-  }
-
-  .section-collapsed .container {
-    display: none;
-  }
-
-  .section-collapsed h2::after {
-    width: 120px;
-    background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
-  }
-
-  @media (max-width: 768px) {
-    h1 { font-size: 2.5em; }
-    .container { grid-template-columns: 1fr; gap: 20px; padding: 10px; }
-    button { width: 100%; }
-    .main-buttons { flex-direction: column; }
-    .iframe-controls { flex-direction: column; }
-    .book-card { padding: 25px 20px; min-height: 160px; }
-    .book-icon { font-size: 3em; }
-    .book-title { font-size: 1.2em; }
-    .section-header { flex-direction: column; gap: 10px; }
-    .book-card.expanded .book-content { max-height: 600px; }
-    .content-files { max-height: 500px; }
-  }
-</style>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Educacional</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <h1>🌐 Portal Educacional</h1>
 
-<h1>🌐 Portal Educacional</h1>
-
-<!-- PÁGINA INICIAL -->
-<div id="menuPrincipal" class="main-buttons">
-  <button onclick="abrirSecao('teacher')">👩‍🏫 Teacher</button>
-  <button onclick="abrirSecao('admin')">🏫 Administração</button>
-  <button onclick="abrirSecao('alunos')">🎮 Alunos</button>
-</div>
-
-<!-- TEACHER -->
-<div id="teacher" class="section">
-  <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
-
-  <!-- Seção Livros Novos com setinha -->
-  <div id="secaoNovos" class="book-section section-collapsed">
-    <div class="section-header" onclick="alternarSecao('novos')">
-      <h2>📗 Livros Novos</h2>
-      <div class="toggle-icon">▼</div>
+    <!-- TELA DE LOGIN -->
+    <div id="loginScreen" class="login-container">
+        <h2>🔐 Acesso ao Portal</h2>
+        <input type="text" id="username" placeholder="Usuário" />
+        <input type="password" id="password" placeholder="Senha" />
+        <button onclick="login()">Entrar</button>
+        <p>Não tem conta? <a href="#" onclick="mostrarCadastro()">Cadastre-se</a></p>
     </div>
-    <div class="container" id="listaNovos">
-      <div class="loading">Carregando materiais mágicos...</div>
+
+    <!-- TELA DE CADASTRO -->
+    <div id="registerScreen" class="login-container hidden">
+        <h2>🧾 Criar Conta</h2>
+        <input type="text" id="newUsername" placeholder="Novo usuário" />
+        <input type="password" id="newPassword" placeholder="Nova senha" />
+        <button onclick="registrar()">Cadastrar</button>
+        <p><a href="#" onclick="mostrarLogin()">Já tenho conta</a></p>
     </div>
-  </div>
 
-  <!-- Seção Livros Antigos com setinha -->
-  <div id="secaoAntigos" class="book-section section-collapsed">
-    <div class="section-header" onclick="alternarSecao('antigos')">
-      <h2>📕 Livros Antigos</h2>
-      <div class="toggle-icon">▼</div>
+    <!-- MENU PRINCIPAL -->
+    <div id="menuPrincipal" class="main-buttons hidden">
+        <button onclick="abrirSecao('teacher')">👩‍🏫 Teacher</button>
+        <button onclick="abrirSecao('admin')">🏫 Administração</button>
+        <button onclick="abrirSecao('alunos')">🎮 Alunos</button>
     </div>
-    <div class="container" id="listaAntigos">
-      <div class="loading">Carregando materiais mágicos...</div>
+
+    <!-- SEÇÃO TEACHER -->
+    <div id="teacher" class="section protected-section">
+        <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
+
+        <div id="secaoNovos" class="book-section section-collapsed">
+            <div class="section-header" onclick="alternarSecao('novos')">
+                <h2>📗 Livros Novos</h2>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="container" id="listaNovos">
+                <div class="loading">Carregando livros novos...</div>
+            </div>
+        </div>
+
+        <!-- Kids Series Section - Added -->
+        <div class="section-header" onclick="alternarSecao('kids')">
+            <h2>👶 Kids Series</h2>
+            <span class="toggle-icon">▼</span>
+        </div>
+        <div id="secaoKids" class="section-collapsed">
+            <div id="listaKids" class="container">
+                <div class="loading">Carregando materiais Kids...</div>
+            </div>
+        </div>
+
+        <div id="secaoAntigos" class="book-section section-collapsed">
+            <div class="section-header" onclick="alternarSecao('antigos')">
+                <h2>📕 Livros Antigos</h2>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="container" id="listaAntigos">
+                <div class="loading">Carregando livros antigos...</div>
+            </div>
+        </div>
+
+        <!-- Nova seção de Outros Idiomas -->
+        <div class="section-header" onclick="alternarSecao('outrosIdiomas')">
+            <h2>🌍 Outros Idiomas</h2>
+            <span class="toggle-icon">▼</span>
+        </div>
+        <div id="secaoOutrosIdiomas" class="section-collapsed">
+            <div id="listaOutrosIdiomas" class="container">
+                <div class="loading">Carregando outros idiomas...</div>
+            </div>
+        </div>
+
+        <div id="secaoExtras" class="book-section section-collapsed">
+            <div class="section-header" onclick="alternarSecao('extras')">
+                <h2>📘 Materiais Extras</h2>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="container" id="listaExtras">
+                <div class="loading">Carregando materiais extras...</div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Seção Materiais Extras com setinha -->
-  <div id="secaoExtras" class="book-section section-collapsed">
-    <div class="section-header" onclick="alternarSecao('extras')">
-      <h2>📘 Materiais Extras</h2>
-      <div class="toggle-icon">▼</div>
+    <!-- SEÇÃO ADMIN -->
+    <div id="admin" class="section protected-section">
+        <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
+        <h2>Área Administrativa</h2>
+        <p>Conteúdo protegido por senha.</p>
     </div>
-    <div class="container" id="listaExtras">
-      <div class="loading">Carregando materiais mágicos...</div>
+
+    <!-- SEÇÃO ALUNOS -->
+    <div id="alunos" class="section">
+        <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
+
+        <div class="main-buttons">
+            <button onclick="abrirSubSecao('games')">🎮 Games</button>
+            <button onclick="abrirSubSecao('extrasAlunos')">📘 Extra Activities</button>
+            <button onclick="abrirSubSecao('plataformasWizard')">🌟 Plataformas Wizard</button>
+        </div>
+
+        <!-- Games Section -->
+        <div id="games" class="hidden">
+            <h2>Escolha um jogo para começar:</h2>
+            <div class="game-list" id="gameList"></div>
+            
+            <div id="iframeContainer" class="hidden iframe-container">
+                <iframe id="gameIframe"></iframe>
+                <div class="iframe-controls">
+                    <button class="back-btn" onclick="voltarParaGames()">⬅ Voltar para Games</button>
+                    <button class="stop-btn" onclick="pararJogo()">⏹️ Parar Jogo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extra Activities -->
+        <div id="extrasAlunos" class="hidden">
+            <h2>📘 Extra Activities</h2>
+            <div class="container" id="listaExtrasAlunos">
+                <div class="loading">Carregando atividades extras...</div>
+            </div>
+        </div>
+
+        <!-- Plataformas Wizard -->
+        <div id="plataformasWizard" class="section hidden">
+            <!-- Conteúdo será preenchido dinamicamente pelo JavaScript -->
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- ADMIN -->
-<div id="admin" class="section">
-  <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
-  <h2>Área Administrativa</h2>
-  <p>Conteúdo protegido por senha.</p>
-</div>
-
-<!-- ALUNOS -->
-<div id="alunos" class="section">
-  <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
-
-  <div class="main-buttons">
-    <button onclick="abrirSubSecao('games')">🎮 Games</button>
-    <button onclick="abrirSubSecao('extrasAlunos')">📘 Extra Activities</button>
-  </div>
-
-  <!-- Games -->
-  <div id="games" class="hidden">
-    <h2>Escolha um jogo para começar:</h2>
-    <div class="game-list">
-      <!-- Games to Learn English -->
-      <div class="game-card" onclick="abrirJogo('https://www.gamestolearnenglish.com/')">
-        <div class="game-image-container">
-          <img src="./english-games.png" alt="Games to Learn English" class="game-image" 
-               onerror="handleImageError(this, '🌍')">
-        </div>
-        <div class="game-content">
-          <h3 class="game-title">Games to Learn English</h3>
-          <p class="game-description">Jogos divertidos para praticar inglês de forma interativa</p>
-        </div>
-      </div>
-
-      <!-- FoodGuessr -->
-      <div class="game-card" onclick="abrirJogoExterno('https://www.foodguessr.com/game/daily')">
-        <div class="game-image-container">
-          <img src="./foodguessr.jpg" alt="FoodGuessr" class="game-image"
-               onerror="handleImageError(this, '🍕')">
-        </div>
-        <div class="game-content">
-          <h3 class="game-title">FoodGuessr</h3>
-          <p class="game-description">Adivinhe comidas de diferentes países pelo mundo</p>
-        </div>
-      </div>
-
-      <!-- Gartic Phone -->
-      <div class="game-card" onclick="abrirJogoExterno('https://garticphone.com/en')">
-        <div class="game-image-container">
-          <img src="./gartic-phone.jpg" alt="Gartic Phone" class="game-image"
-               onerror="handleImageError(this, '📱')">
-        </div>
-        <div class="game-content">
-          <h3 class="game-title">Gartic Phone</h3>
-          <p class="game-description">Desenhe e adivinhe com seus amigos online</p>
-        </div>
-      </div>
-
-      <!-- ZType -->
-      <div class="game-card" onclick="abrirJogo('https://zty.pe/')">
-        <div class="game-image-container">
-          <img src="./ztype.png" alt="ZType" class="game-image"
-               onerror="handleImageError(this, '⌨️')">
-        </div>
-        <div class="game-content">
-          <h3 class="game-title">ZType - Typing Game</h3>
-          <p class="game-description">Melhore sua digitação destruindo palavras com tiros</p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Container do iframe com controles -->
-    <div id="iframeContainer" class="hidden iframe-container">
-      <iframe id="gameIframe"></iframe>
-      <div class="iframe-controls">
-        <button class="back-btn" onclick="voltarParaGames()">⬅ Voltar para Games</button>
-        <button class="stop-btn" onclick="pararJogo()">⏹️ Parar Jogo</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Extra Activities -->
-  <div id="extrasAlunos" class="hidden">
-    <h2>Extra Activities</h2>
-    <p>Conteúdo em desenvolvimento...</p>
-  </div>
-</div>
-
-<script>
-// FUNÇÃO PARA LIDAR COM ERROS DE IMAGEM
-function handleImageError(imgElement, fallbackEmoji) {
-  console.log(`Imagem ${imgElement.src} não encontrada, usando fallback: ${fallbackEmoji}`);
-  
-  // Substituir a imagem por um fallback com emoji
-  const container = imgElement.parentElement;
-  container.innerHTML = `<div class="image-fallback">${fallbackEmoji}</div>`;
-}
-
-const SENHA = "2020";
-
-// CACHE PARA CONTEÚDO JÁ CARREGADO
-const cacheConteudo = new Map();
-const cacheLivros = new Map();
-
-// ALTERAÇÃO: Todas as seções começam retraídas
-let secoesExpandidas = {
-  novos: false,
-  antigos: false,
-  extras: false
-};
-
-// ABRIR SEÇÃO COM OU SEM SENHA
-function abrirSecao(secao) {
-  if (secao === 'teacher' || secao === 'admin') {
-    const senhaDigitada = prompt("🔐 Digite a senha:");
-    if(senhaDigitada !== SENHA){
-      alert("Senha incorreta!");
-      return;
-    }
-  }
-  document.getElementById('menuPrincipal').style.display = 'none';
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.getElementById(secao).style.display = 'block';
-
-  // Carregar materiais apenas quando Teacher é aberto
-  if(secao === 'teacher') carregarPastas();
-}
-
-// VOLTAR PARA MENU
-function voltar() {
-  // Para o jogo antes de voltar
-  pararJogo();
-  
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.getElementById('menuPrincipal').style.display = 'flex';
-  document.getElementById('iframeContainer').classList.add('hidden');
-}
-
-// VOLTAR PARA LISTA DE GAMES (sem parar completamente)
-function voltarParaGames() {
-  document.getElementById('iframeContainer').classList.add('hidden');
-}
-
-// PARAR JOGO COMPLETAMENTE
-function pararJogo() {
-  const iframe = document.getElementById('gameIframe');
-  
-  // Método 1: Remover o src completamente
-  iframe.src = 'about:blank';
-  
-  // Método 2: Tentar parar qualquer áudio/vídeo
-  try {
-    iframe.contentWindow.postMessage('stop', '*');
-  } catch (e) {
-    // Ignora erros de cross-origin
-  }
-  
-  // Método 3: Esconder o iframe
-  document.getElementById('iframeContainer').classList.add('hidden');
-  
-  console.log('Jogo parado completamente');
-}
-
-// ABRIR SUBSEÇÃO DENTRO DE ALUNOS
-function abrirSubSecao(id) {
-  // Para qualquer jogo rodando antes de mudar de seção
-  pararJogo();
-  
-  document.getElementById('games').classList.add('hidden');
-  document.getElementById('extrasAlunos').classList.add('hidden');
-  document.getElementById('iframeContainer').classList.add('hidden');
-  document.getElementById(id).classList.remove('hidden');
-}
-
-// ABRIR JOGO NO IFRAME
-function abrirJogo(url) {
-  const iframe = document.getElementById('gameIframe');
-  iframe.src = url;
-  document.getElementById('iframeContainer').classList.remove('hidden');
-}
-
-// ABRIR JOGO EXTERNO EM NOVA ABA
-function abrirJogoExterno(url) {
-  window.open(url, '_blank');
-}
-
-// FUNÇÕES PARA EXPANDIR/RECOLHER SEÇÕES
-function alternarSecao(tipo) {
-  const secao = document.getElementById(`secao${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
-  
-  if (secoesExpandidas[tipo]) {
-    secao.classList.add('section-collapsed');
-    secoesExpandidas[tipo] = false;
-  } else {
-    secao.classList.remove('section-collapsed');
-    secoesExpandidas[tipo] = true;
-  }
-}
-
-// FUNÇÕES DO DRIVE
-const API_KEY = "AIzaSyBpdK2e9XfRgQdcf-cnx4nV1z6BaDeeYWM";
-const FOLDER_ID = "1pOe6fvSe6w08taSC3UnoOQnPUQAZcdw8";
-const ENGLISH_FOLDER_NAME = "English";
-
-// Função para listar TODAS as pastas principais
-async function listarPastasPrincipais() {
-  try {
-    console.log('Buscando pastas principais...');
-    
-    const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink)&orderBy=name`;
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (!data.files || data.files.length === 0) {
-      console.log('Nenhuma pasta encontrada');
-      return [];
-    }
-    
-    console.log(`Encontradas ${data.files.length} pastas principais`);
-    
-    const todasPastas = [];
-    
-    for (const item of data.files) {
-      if (item.name === ENGLISH_FOLDER_NAME) {
-        console.log('Encontrada pasta English, processando conteúdo interno...');
-        const conteudoEnglish = await carregarConteudoPastaEnglish(item.id);
-        todasPastas.push(...conteudoEnglish);
-      } else {
-        todasPastas.push({
-          id: item.id,
-          nome: item.name,
-          tipo: item.mimeType,
-          link: item.webViewLink,
-          conteudo: null,
-          origem: 'principal'
-        });
-      }
-    }
-    
-    console.log(`Total de itens após processamento: ${todasPastas.length}`);
-    return todasPastas;
-  } catch (error) {
-    console.error('Erro ao buscar pastas principais:', error);
-    throw error;
-  }
-}
-
-// Função especial para carregar conteúdo da pasta English
-async function carregarConteudoPastaEnglish(englishFolderId) {
-  try {
-    console.log(`Carregando conteúdo da pasta English (ID: ${englishFolderId})`);
-    
-    const url = `https://www.googleapis.com/drive/v3/files?q='${englishFolderId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink)&orderBy=name`;
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (!data.files || data.files.length === 0) {
-      console.log('Pasta English está vazia');
-      return [];
-    }
-    
-    const itensEnglish = data.files.map(item => ({
-      id: item.id,
-      nome: item.name,
-      tipo: item.mimeType,
-      link: item.webViewLink,
-      conteudo: null,
-      origem: 'english'
-    }));
-    
-    console.log(`Encontrados ${itensEnglish.length} itens dentro da pasta English`);
-    return itensEnglish;
-  } catch (error) {
-    console.error('Erro ao carregar pasta English:', error);
-    return [];
-  }
-}
-
-// Carregar TODOS os arquivos de uma pasta com paginação
-async function carregarTodosArquivosPasta(pastaId) {
-  let todosArquivos = [];
-  let nextPageToken = null;
-  
-  try {
-    do {
-      let url = `https://www.googleapis.com/drive/v3/files?q='${pastaId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,webContentLink),nextPageToken&orderBy=name&pageSize=1000`;
-      
-      if (nextPageToken) {
-        url += `&pageToken=${nextPageToken}`;
-      }
-      
-      console.log(`Carregando página da pasta ${pastaId}...`);
-      
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      if (data.files && data.files.length > 0) {
-        const arquivosPagina = data.files.map(item => ({
-          id: item.id,
-          nome: item.name,
-          tipo: item.mimeType,
-          link: item.webViewLink || `https://drive.google.com/file/d/${item.id}/view`
-        }));
-        
-        todosArquivos = todosArquivos.concat(arquivosPagina);
-        console.log(`Adicionados ${arquivosPagina.length} arquivos. Total: ${todosArquivos.length}`);
-      }
-      
-      nextPageToken = data.nextPageToken || null;
-      
-    } while (nextPageToken);
-    
-    console.log(`Total de arquivos carregados da pasta ${pastaId}: ${todosArquivos.length}`);
-    return todosArquivos;
-    
-  } catch (error) {
-    console.error(`Erro ao carregar pasta ${pastaId}:`, error);
-    throw error;
-  }
-}
-
-// Função para carregar conteúdo de múltiplas pastas
-async function carregarConteudoMultiplasPastas(pastaIds) {
-  try {
-    console.log(`Carregando conteúdo de ${pastaIds.length} pastas...`);
-    
-    const promises = pastaIds.map(async (pastaId) => {
-      if (cacheConteudo.has(pastaId)) {
-        console.log(`Usando cache para pasta ${pastaId}`);
-        return { pastaId, conteudo: cacheConteudo.get(pastaId) };
-      }
-      
-      try {
-        const conteudo = await carregarTodosArquivosPasta(pastaId);
-        cacheConteudo.set(pastaId, conteudo);
-        return { pastaId, conteudo };
-      } catch (error) {
-        console.error(`Erro ao carregar pasta ${pastaId}:`, error);
-        return { pastaId, conteudo: [], error: error.message };
-      }
-    });
-    
-    const resultados = await Promise.allSettled(promises);
-    
-    const conteudos = {};
-    resultados.forEach(resultado => {
-      if (resultado.status === 'fulfilled') {
-        conteudos[resultado.value.pastaId] = resultado.value.conteudo;
-      }
-    });
-    
-    return conteudos;
-  } catch (error) {
-    console.error('Erro ao carregar múltiplas pastas:', error);
-    return {};
-  }
-}
-
-// Classificar os livros
-function classificarLivros(livros) {
-  const novos = [];
-  const antigos = [];
-  const extras = [];
-
-  livros.forEach(livro => {
-    const nome = livro.nome.toLowerCase();
-    
-    if (nome.includes('new') || nome.includes('3rd')) {
-      novos.push(livro);
-    }
-    else if (nome.includes('audio') || 
-             nome.includes('answer') || 
-             nome.includes('checking') ||
-             nome.includes('peic') ||
-             nome.includes('extra activities') ||
-             nome.includes('material')) {
-      extras.push(livro);
-    }
-    else {
-      antigos.push(livro);
-    }
-  });
-
-  return { novos, antigos, extras };
-}
-
-// Criar HTML dos livros
-function criarEstruturaHTML(livros, containerId, categoria) {
-  const container = document.getElementById(containerId);
-  
-  if (!livros || livros.length === 0) {
-    container.innerHTML = `<div class="empty-folder">Nenhum livro encontrado na categoria "${categoria}"</div>`;
-    return;
-  }
-  
-  let html = '';
-  
-  livros.forEach(livro => {
-    const classificacao = classificarItem(livro);
-    const classeCSS = `book-${classificacao}`;
-    const badgeCSS = `badge-${classificacao}`;
-    const icon = getBookIcon(livro.nome);
-    
-    html += `
-      <div class="book-card ${classeCSS}" onclick="alternarLivro(this, '${livro.id}')">
-        <div class="book-badge ${badgeCSS}">${getBadgeText(classificacao)}</div>
-        <div class="book-icon">${icon}</div>
-        <h3 class="book-title">${livro.nome}</h3>
-        <div class="expand-indicator">▼ Clique para expandir ▼</div>
-        <div class="book-content" id="conteudo-${livro.id}">
-          <div class="quick-loading">Carregando...</div>
-        </div>
-      </div>
-    `;
-  });
-  
-  container.innerHTML = html;
-}
-
-// Funções auxiliares
-function getBookIcon(nomeLivro) {
-  const nome = nomeLivro.toLowerCase();
-  if (nome.includes('english') || nome.includes('inglês')) return '🌍';
-  if (nome.includes('math') || nome.includes('matemática')) return '🔢';
-  if (nome.includes('science') || nome.includes('ciência')) return '🔬';
-  if (nome.includes('history') || nome.includes('história')) return '📜';
-  if (nome.includes('art') || nome.includes('arte')) return '🎨';
-  if (nome.includes('music') || nome.includes('música')) return '🎵';
-  if (nome.includes('workbook')) return '📝';
-  if (nome.includes('audio')) return '🎧';
-  if (nome.includes('answer')) return '✅';
-  return '📚';
-}
-
-function getBadgeText(classificacao) {
-  switch(classificacao) {
-    case 'new': return 'Novo';
-    case 'old': return 'Antigo';
-    case 'extra': return 'Extra';
-    default: return 'Livro';
-  }
-}
-
-function classificarItem(item) {
-  const nome = item.nome.toLowerCase();
-  
-  if (nome.includes('new') || nome.includes('3rd')) return 'new';
-  if (nome.includes('audio') || 
-      nome.includes('answer') || 
-      nome.includes('checking') ||
-      nome.includes('peic') ||
-      nome.includes('extra activities') ||
-      nome.includes('material')) return 'extra';
-  
-  return 'old';
-}
-
-// Alternar expansão de um livro
-async function alternarLivro(elemento, pastaId) {
-  elemento.classList.toggle('expanded');
-  
-  const conteudoDiv = elemento.querySelector('.book-content');
-  const loadingDiv = conteudoDiv.querySelector('.quick-loading');
-  
-  if (elemento.classList.contains('expanded') && loadingDiv) {
-    await carregarConteudoLivro(pastaId, conteudoDiv);
-  }
-}
-
-// Ordenar arquivos numericamente
-function ordenarArquivosNumericamente(arquivos) {
-  return arquivos.sort((a, b) => {
-    const numA = extrairNumero(a.nome);
-    const numB = extrairNumero(b.nome);
-    
-    if (numA !== null && numB !== null) {
-      return numA - numB;
-    }
-    
-    if (numA !== null && numB === null) return -1;
-    if (numA === null && numB !== null) return 1;
-    
-    return a.nome.localeCompare(b.nome);
-  });
-}
-
-function extrairNumero(nome) {
-  const match = nome.match(/(\d+)/);
-  return match ? parseInt(match[1]) : null;
-}
-
-// Carregar conteúdo de um livro específico
-async function carregarConteudoLivro(pastaId, containerDiv) {
-  try {
-    console.log(`Carregando conteúdo da pasta ${pastaId}...`);
-    
-    if (cacheConteudo.has(pastaId)) {
-      console.log(`Usando cache para pasta ${pastaId}`);
-      const arquivosOrdenados = ordenarArquivosNumericamente(cacheConteudo.get(pastaId));
-      exibirConteudo(arquivosOrdenados, containerDiv);
-      return;
-    }
-    
-    containerDiv.innerHTML = '<div class="loading-more">Carregando todos os arquivos...</div>';
-    
-    let arquivos = await carregarTodosArquivosPasta(pastaId);
-    arquivos = ordenarArquivosNumericamente(arquivos);
-    cacheConteudo.set(pastaId, arquivos);
-    exibirConteudo(arquivos, containerDiv);
-    
-  } catch (error) {
-    console.error(`Erro ao carregar conteúdo da pasta ${pastaId}:`, error);
-    containerDiv.innerHTML = `<div class="error">Erro ao carregar conteúdo: ${error.message}</div>`;
-  }
-}
-
-// Exibir conteúdo na interface
-function exibirConteudo(arquivos, containerDiv) {
-  if (!arquivos || arquivos.length === 0) {
-    containerDiv.innerHTML = '<div class="empty-folder">Nenhum arquivo encontrado</div>';
-    return;
-  }
-  
-  let html = '<div class="content-files">';
-  
-  html += `<div style="text-align: center; padding: 10px; color: rgba(255,255,255,0.7); font-size: 0.9em;">
-            📚 Total de ${arquivos.length} arquivos
-          </div>`;
-  
-  arquivos.forEach(arquivo => {
-    const icon = getFileIcon(arquivo.tipo);
-    html += `
-      <div class="file-item">
-        <a href="${arquivo.link}" target="_blank" rel="noopener">
-          <span class="file-icon ${icon.class}">${icon.symbol}</span>
-          ${arquivo.nome}
-        </a>
-      </div>
-    `;
-  });
-  
-  html += '</div>';
-  containerDiv.innerHTML = html;
-}
-
-function getFileIcon(mimeType) {
-  if (mimeType.includes('pdf')) return { symbol: '📄', class: 'pdf-icon' };
-  if (mimeType.includes('document')) return { symbol: '📝', class: '' };
-  if (mimeType.includes('spreadsheet')) return { symbol: '📊', class: '' };
-  if (mimeType.includes('presentation')) return { symbol: '📽️', class: '' };
-  if (mimeType.includes('image')) return { symbol: '🖼️', class: '' };
-  if (mimeType.includes('audio')) return { symbol: '🎵', class: '' };
-  if (mimeType.includes('video')) return { symbol: '🎬', class: '' };
-  if (mimeType.includes('folder')) return { symbol: '📁', class: '' };
-  return { symbol: '📎', class: '' };
-}
-
-// FUNÇÃO PRINCIPAL PARA CARREGAR TODOS OS MATERIAIS
-async function carregarPastas() {
-  try {
-    console.log('Iniciando carregamento de pastas...');
-    
-    const pastasPrincipais = await listarPastasPrincipais();
-    
-    if (pastasPrincipais.length === 0) {
-      document.getElementById('listaNovos').innerHTML = '<div class="error">Nenhuma pasta encontrada no Drive</div>';
-      document.getElementById('listaAntigos').innerHTML = '<div class="error">Nenhuma pasta encontrada no Drive</div>';
-      document.getElementById('listaExtras').innerHTML = '<div class="error">Nenhuma pasta encontrada no Drive</div>';
-      return;
-    }
-    
-    console.log(`Processando ${pastasPrincipais.length} pastas...`);
-    
-    const { novos, antigos, extras } = classificarLivros(pastasPrincipais);
-    
-    console.log(`Classificação: ${novos.length} novos, ${antigos.length} antigos, ${extras.length} extras`);
-    
-    criarEstruturaHTML(novos, 'listaNovos', 'Novos');
-    criarEstruturaHTML(antigos, 'listaAntigos', 'Antigos');
-    criarEstruturaHTML(extras, 'listaExtras', 'Extras');
-    
-    const todasPastasIds = [...novos, ...antigos, ...extras].map(pasta => pasta.id);
-    console.log(`Carregando conteúdo de ${todasPastasIds.length} pastas em background...`);
-    
-    setTimeout(() => {
-      carregarConteudoMultiplasPastas(todasPastasIds)
-        .then(() => console.log('Conteúdo carregado em background'))
-        .catch(err => console.error('Erro no carregamento em background:', err));
-    }, 1000);
-    
-  } catch (error) {
-    console.error('Erro ao carregar pastas:', error);
-    
-    const errorMsg = `<div class="error">Erro ao carregar: ${error.message}</div>`;
-    document.getElementById('listaNovos').innerHTML = errorMsg;
-    document.getElementById('listaAntigos').innerHTML = errorMsg;
-    document.getElementById('listaExtras').innerHTML = errorMsg;
-  }
-}
-
-// Inicializar quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Portal Educacional inicializado');
-});
-</script>
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
