@@ -12,26 +12,8 @@
 <body>
     <h1>🌐 Portal Educacional</h1>
 
-    <!-- TELA DE LOGIN -->
-    <div id="loginScreen" class="login-container">
-        <h2>🔐 Acesso ao Portal</h2>
-        <input type="text" id="username" placeholder="Usuário" />
-        <input type="password" id="password" placeholder="Senha" />
-        <button onclick="login()">Entrar</button>
-        <p>Não tem conta? <a href="#" onclick="mostrarCadastro()">Cadastre-se</a></p>
-    </div>
-
-    <!-- TELA DE CADASTRO -->
-    <div id="registerScreen" class="login-container hidden">
-        <h2>🧾 Criar Conta</h2>
-        <input type="text" id="newUsername" placeholder="Novo usuário" />
-        <input type="password" id="newPassword" placeholder="Nova senha" />
-        <button onclick="registrar()">Cadastrar</button>
-        <p><a href="#" onclick="mostrarLogin()">Já tenho conta</a></p>
-    </div>
-
-    <!-- MENU PRINCIPAL -->
-    <div id="menuPrincipal" class="main-buttons hidden">
+    <!-- MENU PRINCIPAL - VISÍVEL DIRETAMENTE -->
+    <div id="menuPrincipal" class="main-buttons">
         <button onclick="abrirSecao('teacher')">👩‍🏫 Teacher</button>
         <button onclick="abrirSecao('admin')">🏫 Administração</button>
         <button onclick="abrirSecao('alunos')">🎮 Alunos</button>
