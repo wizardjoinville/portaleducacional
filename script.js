@@ -35,89 +35,10 @@ let secaoPendente = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Portal Educacional inicializado');
     
-    // Sistema de login local
-    const usuarioLogado = localStorage.getItem('usuarioLogado');
-    if (usuarioLogado) {
-        mostrarPortal(usuarioLogado);
-    }
-    
     inicializarGames();
-    
-    // Permitir pressionar Enter no input de senha
-    const passwordInput = document.getElementById('passwordInput');
-    if (passwordInput) {
-        passwordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                verificarSenha();
-            }
-        });
-    }
 });
 
-// ===== SISTEMA DE AUTENTICAÇÃO =====
-function login() {
-    const user = document.getElementById('username').value.trim();
-    const pass = document.getElementById('password').value.trim();
-
-    const contas = JSON.parse(localStorage.getItem('contas')) || [];
-    const conta = contas.find(c => c.user === user && c.pass === pass);
-
-    if (conta) {
-        localStorage.setItem('usuarioLogado', user);
-        mostrarPortal(user);
-    } else {
-        alert('Usuário ou senha incorretos!');
-    }
-}
-
-function registrar() {
-    const newUser = document.getElementById('newUsername').value.trim();
-    const newPass = document.getElementById('newPassword').value.trim();
-
-    if (!newUser || !newPass) {
-        alert('Por favor, preencha todos os campos!');
-        return;
-    }
-
-    const contas = JSON.parse(localStorage.getItem('contas')) || [];
-    
-    if (contas.some(c => c.user === newUser)) {
-        alert('Este usuário já existe!');
-        return;
-    }
-
-    contas.push({ user: newUser, pass: newPass });
-    localStorage.setItem('contas', JSON.stringify(contas));
-    alert('Conta criada com sucesso!');
-    mostrarLogin();
-}
-
-function mostrarPortal(user) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('registerScreen').style.display = 'none';
-    document.body.insertAdjacentHTML(
-        'afterbegin',
-        `<div class="user-info">👤 Logado como: <b>${user}</b> <button onclick="logout()">Sair</button></div>`
-    );
-    document.getElementById('menuPrincipal').classList.remove('hidden');
-}
-
-function logout() {
-    localStorage.removeItem('usuarioLogado');
-    window.location.reload();
-}
-
-function mostrarCadastro() {
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('registerScreen').classList.remove('hidden');
-}
-
-function mostrarLogin() {
-    document.getElementById('registerScreen').classList.add('hidden');
-    document.getElementById('loginScreen').classList.remove('hidden');
-}
-
-// ===== SISTEMA DE MODAL PARA SENHA DAS SEÇÕES TEACHER/ADMIN =====
+// ===== SISTEMA DE AUTENTICAÇÃO PARA SEÇÕES PROTEGIDAS =====
 function abrirSecao(secao) {
     if (secao === 'teacher' || secao === 'admin') {
         mostrarModalSenha(secao);
@@ -196,16 +117,12 @@ function verificarSenhaModal(secao) {
 function fecharModalSenha() {
     const modal = document.getElementById('senhaModal');
     const menuPrincipal = document.getElementById('menuPrincipal');
-    const userInfo = document.querySelector('.user-info');
     
     if (!modal) {
         // Se o modal não existir, apenas restaura a UI
         if (menuPrincipal) {
             menuPrincipal.style.display = 'flex';
             menuPrincipal.classList.remove('hidden');
-        }
-        if (userInfo) {
-            userInfo.style.display = 'block';
         }
         return;
     }
@@ -225,11 +142,6 @@ function fecharModalSenha() {
                 menuPrincipal.classList.remove('hidden');
             }
             
-            // Restaura a barra de usuário
-            if (userInfo) {
-                userInfo.style.display = 'block';
-            }
-            
             // Remove o listener
             modal.removeEventListener('transitionend', handleTransition);
         }
@@ -238,55 +150,11 @@ function fecharModalSenha() {
     modal.addEventListener('transitionend', handleTransition);
 }
 
-function abrirModalSenha() {
-    document.getElementById('passwordModal').classList.remove('hidden');
-    document.getElementById('passwordInput').value = '';
-    document.getElementById('passwordError').classList.add('hidden');
-    document.getElementById('passwordInput').focus();
-}
-
-function verificarSenha(secao) {
-    const modalId = `${secao}PasswordModal`;
-    const inputId = `${secao}PasswordInput`;
-    const errorId = `${secao}PasswordError`;
-    
-    const senhaDigitada = document.getElementById(inputId).value;
-    const errorElement = document.getElementById(errorId);
-    
-    console.log('Verificando senha para:', secao);
-    
-    if (senhaDigitada === CONFIG.SENHA) {
-        document.getElementById(modalId).classList.add('hidden');
-        if (secaoPendente) {
-            abrirSecaoDiretamente(secaoPendente);
-            secaoPendente = null;
-        }
-    } else {
-        errorElement.classList.remove('hidden');
-        document.getElementById(inputId).value = '';
-        document.getElementById(inputId).focus();
-        document.getElementById(inputId).classList.add('shake');
-        setTimeout(() => {
-            document.getElementById(inputId).classList.remove('shake');
-        }, 500);
-    }
-}
-
-function fecharModalSenhaAntigo(secao) {
-    const modalId = `${secao}PasswordModal`;
-    document.getElementById(modalId).classList.add('hidden');
-    secaoPendente = null;
-}
-
 function abrirSecaoDiretamente(secao) {
     console.log('Abrindo seção diretamente:', secao);
     
     document.getElementById('menuPrincipal').classList.add('hidden');
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    
-    // Ocultar a barra de usuário
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo) userInfo.style.display = 'none';
     
     const secaoElement = document.getElementById(secao);
     if (secaoElement) {
@@ -300,10 +168,6 @@ function abrirSecaoDiretamente(secao) {
 // Controle de navegação
 function voltar() {
     pararJogo();
-    
-    // Mostrar a barra de usuário novamente
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo) userInfo.style.display = 'block';
     
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
     document.getElementById('menuPrincipal').style.display = 'flex';
