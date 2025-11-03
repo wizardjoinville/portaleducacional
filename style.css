@@ -1203,31 +1203,81 @@ h2::after {
     box-shadow: 0 12px 30px rgba(74, 222, 128, 0.4);
 }
 
+/* Estilos para Plataformas Wizard */
 .plataformas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin: 20px 0;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .plataforma-card {
-    background: rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 15px;
-    padding: 20px;
+    padding: 25px;
     text-align: center;
-    transition: transform 0.3s ease;
+    color: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .plataforma-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
 .plataforma-img {
-    width: 200px;
-    height: 100px;
-    object-fit: contain;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
     margin-bottom: 15px;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    border: 3px solid rgba(255,255,255,0.2);
+}
+
+.plataforma-card h3 {
+    margin: 15px 0 10px 0;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.plataforma-card p {
+    margin-bottom: 20px;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.plataforma-card .extra-activity-link {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.plataforma-card .extra-activity-link:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+}
+
+.plataforma-card .favorite-btn {
+    margin-top: 15px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.plataforma-card .favorite-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
 }
 /* ESTILOS PARA EXTRAS DOS ALUNOS */
 .extras-grid {
@@ -1322,4 +1372,1043 @@ h2::after {
     .extra-activity-title {
         font-size: 1.2em;
     }
+}
+/* TODO: Cole todo o CSS do seu arquivo original aqui */
+
+/* ... (TODO O CSS ANTERIOR PERMANECE AQUI) ... */
+
+/* ===== NOVOS ESTILOS PARA AS FUNCIONALIDADES ADICIONAIS ===== */
+
+/* BARRA DE BUSCA GLOBAL */
+.search-global {
+    max-width: 600px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.search-global input {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 25px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.search-global input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+.search-global input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+    margin-top: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.search-results.active {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.search-result-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-result-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-icon {
+    font-size: 1.2em;
+    color: #667eea;
+}
+
+.search-info {
+    flex: 1;
+}
+
+.search-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.search-details {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.search-no-results {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* BOTÃO DE FAVORITOS */
+.favorite-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.favorite-btn:hover {
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.2);
+}
+
+/* SEÇÃO FAVORITOS */
+.favoritos-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.favoritos-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.stat-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: rgba(255,255,255,0.8);
+}
+
+.stat-card span {
+    font-size: 2em;
+    font-weight: 700;
+    color: #4ade80;
+}
+
+.favoritos-list {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 300px;
+}
+
+.favorito-item {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.favorito-item:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateX(5px);
+}
+
+.favorito-icon {
+    font-size: 2em;
+    flex-shrink: 0;
+}
+
+.favorito-info {
+    flex: 1;
+}
+
+.favorito-info h4 {
+    margin: 0 0 5px 0;
+    color: white;
+    font-size: 1.1em;
+}
+
+.favorito-info small {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85em;
+}
+
+.favorito-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.favorito-link {
+    background: #4ade80;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.favorito-link:hover {
+    background: #22c55e;
+    transform: translateY(-2px);
+}
+
+.favorito-remove {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.favorito-remove:hover {
+    background: rgba(239, 68, 68, 0.3);
+    transform: scale(1.1);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.7);
+}
+
+.empty-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    margin: 0 0 10px 0;
+    color: rgba(255,255,255,0.9);
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 0.95em;
+}
+
+/* SEÇÃO CALENDÁRIO */
+.calendario-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.calendario-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 1.5em;
+}
+
+.calendario-header button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendario-header button:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 30px;
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.calendario-dia-header {
+    text-align: center;
+    padding: 15px 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+}
+
+.calendario-dia {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px;
+    min-height: 80px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.calendario-dia:hover {
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.02);
+}
+
+.calendario-dia.hoje {
+    background: rgba(74, 222, 128, 0.2);
+    border-color: rgba(74, 222, 128, 0.5);
+}
+
+.calendario-dia.fim-semana {
+    background: rgba(248, 113, 113, 0.1);
+}
+
+.calendario-dia.vazio {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.calendario-dia.vazio:hover {
+    background: transparent;
+    transform: none;
+}
+
+.dia-numero {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.evento-indicador {
+    background: #667eea;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.calendario-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.calendario-controls button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendario-controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.eventos-proximos {
+    background: rgba(255,255,255,0.1);
+    padding: 25px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.eventos-proximos h3 {
+    margin: 0 0 20px 0;
+    color: white;
+    text-align: center;
+}
+
+.evento-proximo {
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.evento-data {
+    font-weight: 600;
+    color: #4ade80;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.evento-titulo {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.evento-materia {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.evento-descricao {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85em;
+    font-style: italic;
+}
+
+.sem-eventos {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+    padding: 20px;
+}
+
+/* MODAL DE EVENTO */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.modal-header {
+    background: rgba(0,0,0,0.2);
+    padding: 25px 30px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: white;
+}
+
+.close-modal {
+    font-size: 2em;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.close-modal:hover {
+    color: white;
+    background: rgba(255,255,255,0.1);
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+    font-weight: 500;
+}
+
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.15);
+}
+
+.form-input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+
+.cancel-btn, .confirm-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.cancel-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: white;
+}
+
+.confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);
+}
+
+/* NOTIFICAÇÕES */
+.notificacao {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4ade80;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    max-width: 400px;
+    word-wrap: break-word;
+    white-space: pre-line;
+}
+
+.notificacao.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(100px); }
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .search-global {
+        margin: 20px 10px;
+    }
+    
+    .favoritos-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .calendario-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .calendario-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        padding: 10px;
+    }
+    
+    .calendario-dia {
+        min-height: 60px;
+        padding: 5px;
+        font-size: 0.8em;
+    }
+    
+    .calendario-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .favorito-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .favorito-actions {
+        justify-content: center;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendario-dia {
+        min-height: 50px;
+        font-size: 0.7em;
+    }
+    
+    .evento-indicador {
+        font-size: 0.6em;
+        padding: 1px 5px;
+    }
+    
+    .notificacao {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+/* CALENDÁRIO DISCRETO NO CANTO */
+.calendario-container {
+    max-width: 400px;
+    margin: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 5px;
+}
+
+.calendario-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.calendario-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8em;
+}
+
+.calendario-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 15px;
+}
+
+.calendario-dia-header {
+    text-align: center;
+    padding: 8px 2px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.7em;
+    text-transform: uppercase;
+}
+
+.calendario-dia {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 6px 2px;
+    min-height: 35px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.calendario-dia:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.calendario-dia.hoje {
+    background: rgba(74, 222, 128, 0.3);
+    border-color: rgba(74, 222, 128, 0.5);
+}
+
+.calendario-dia.fim-semana {
+    background: rgba(248, 113, 113, 0.1);
+}
+
+.calendario-dia.vazio {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.calendario-dia.vazio:hover {
+    background: transparent;
+    transform: none;
+}
+
+.dia-numero {
+    font-weight: 600;
+    color: white;
+    font-size: 0.8em;
+    margin-bottom: 2px;
+}
+
+.evento-indicador {
+    background: #667eea;
+    color: white;
+    padding: 1px 4px;
+    border-radius: 8px;
+    font-size: 0.6em;
+    font-weight: 600;
+    position: relative;
+    min-width: 16px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.evento-indicador:hover .evento-tooltip {
+    display: block;
+}
+
+.evento-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.evento-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.calendario-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.calendario-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8em;
+}
+
+.calendario-controls button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Modal de eventos do dia */
+.eventos-dia-lista {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.sem-eventos-dia {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    padding: 20px;
+}
+
+.evento-dia-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.evento-dia-titulo {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.evento-dia-materia {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
+
+.evento-dia-descricao {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75em;
+    font-style: italic;
+}
+
+.evento-dia-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.evento-editar, .evento-excluir {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.7em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.evento-editar {
+    background: rgba(59, 130, 246, 0.3);
+    color: white;
+}
+
+.evento-editar:hover {
+    background: rgba(59, 130, 246, 0.5);
+}
+
+.evento-excluir {
+    background: rgba(239, 68, 68, 0.3);
+    color: white;
+}
+
+.evento-excluir:hover {
+    background: rgba(239, 68, 68, 0.5);
+}
+
+/* Eventos próximos compactos */
+.eventos-proximos {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.eventos-proximos h3 {
+    margin: 0 0 12px 0;
+    color: white;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.evento-proximo {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border-left: 3px solid #667eea;
+    font-size: 0.8em;
+}
+
+.evento-data {
+    font-weight: 600;
+    color: #4ade80;
+    margin-bottom: 3px;
+    font-size: 0.75em;
+}
+
+.evento-titulo {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 3px;
+    font-size: 0.8em;
+}
+
+.evento-materia {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.7em;
+}
+
+.evento-descricao {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.7em;
+    font-style: italic;
+    margin-top: 3px;
+}
+
+.evento-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.evento-actions button {
+    padding: 3px 6px;
+    border: none;
+    border-radius: 3px;
+    font-size: 0.6em;
+    cursor: pointer;
+}
+
+/* Responsividade para calendário discreto */
+@media (max-width: 768px) {
+    .calendario-container {
+        max-width: 100%;
+        margin: 10px;
+    }
+    
+    .calendario-dia {
+        min-height: 30px;
+        padding: 4px 1px;
+    }
+    
+    .dia-numero {
+        font-size: 0.7em;
+    }
+    
+    .evento-indicador {
+        font-size: 0.5em;
+        min-width: 14px;
+        height: 12px;
+    }
+}
+/* Estilo para garantir que os botões voltar nas subseções fiquem consistentes */
+#alunos .back-btn {
+    margin-bottom: 20px;
+    display: block;
+    width: fit-content;
+}
+
+/* Garantir que as subseções tenham padding consistente */
+#games, #extrasAlunos, #plataformasWizard {
+    padding: 20px;
+}
+
+/* Estilo específico para o container das plataformas Wizard */
+.plataformas-content .back-btn {
+    margin-bottom: 20px;
 }
