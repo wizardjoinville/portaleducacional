@@ -12,6 +12,91 @@ const CONFIG = {
     SENHA_PROTEGIDA: "2020"
 };
 
+// ===== DADOS DO CALENDÁRIO (Mockado para funcionar sem Google Sheets) =====
+const DADOS_CALENDARIO_MOCKADO = [
+    // Janeiro 2026
+    { data: '2026-01-01', evento: 'Confraternização Universal', tipo: 'Feriado', descricao: 'Ano Novo' },
+    { data: '2026-01-02', evento: 'Retorno às aulas', tipo: 'Período 1', descricao: 'Início do período letivo' },
+    
+    // Fevereiro 2026
+    { data: '2026-02-14', evento: 'Valentine\'s Day', tipo: 'Evento', descricao: 'Comemoração típica em escolas de inglês' },
+    { data: '2026-02-16', evento: 'Carnaval', tipo: 'Feriado', descricao: 'Período de Carnaval - feriado nacional' },
+    { data: '2026-02-17', evento: 'Carnaval (segunda-feira)', tipo: 'Feriado', descricao: 'Dia principal de Carnaval' },
+    
+    // Março 2026
+    { data: '2026-03-09', evento: 'Aniversário de Joinville', tipo: 'Evento', descricao: 'Comemoração cultural joinvilense' },
+    { data: '2026-03-17', evento: 'St. Patrick\'s Day', tipo: 'Evento', descricao: 'Comemoração cultural irlandesa' },
+    { data: '2026-03-30', evento: 'Período 1', tipo: 'Período 1', descricao: 'Período 1 em andamento' },
+    
+    // Abril 2026
+    { data: '2026-04-03', evento: 'Sexta-feira Santa', tipo: 'Feriado', descricao: 'Feriado nacional religioso' },
+    { data: '2026-04-05', evento: 'Páscoa', tipo: 'Feriado', descricao: 'Domingo de Páscoa - atividades lúdicas' },
+    { data: '2026-04-23', evento: 'Dia Municipal do Livro', tipo: 'Evento', descricao: 'Atividades literárias e culturais' },
+    
+    // Maio 2026
+    { data: '2026-05-01', evento: 'Dia do Trabalho', tipo: 'Feriado', descricao: 'Feriado nacional' },
+    { data: '2026-05-10', evento: 'Atividades de Maio', tipo: 'Período 1', descricao: 'Atividades especiais do mês' },
+    { data: '2026-05-20', evento: 'Confraternização de Alunos', tipo: 'Evento', descricao: 'Integração entre turmas' },
+    
+    // Junho 2026
+    { data: '2026-06-04', evento: 'Festa Junina', tipo: 'Evento', descricao: 'Celebração das festas juninas' },
+    { data: '2026-06-12', evento: 'Santo Antônio', tipo: 'Evento', descricao: 'Comemoração tradicional' },
+    { data: '2026-06-24', evento: 'São João', tipo: 'Evento', descricao: 'Festa tradicional' },
+    { data: '2026-06-29', evento: 'Período 1 - Final', tipo: 'Período 1', descricao: 'Encerramento do período 1' },
+    
+    // Julho 2026
+    { data: '2026-07-01', evento: 'Férias Escolares', tipo: 'Férias', descricao: 'Início das férias de julho' },
+    { data: '2026-07-15', evento: 'Férias em Andamento', tipo: 'Férias', descricao: 'Metade do período de férias' },
+    { data: '2026-07-31', evento: 'Encerramento das Férias', tipo: 'Férias', descricao: 'Último dia de férias' },
+    
+    // Agosto 2026
+    { data: '2026-08-01', evento: 'Período 2 - Início', tipo: 'Período 2', descricao: 'Início do segundo período' },
+    { data: '2026-08-10', evento: 'Atividades de Agosto', tipo: 'Período 2', descricao: 'Aulas em andamento' },
+    { data: '2026-08-29', evento: 'Mês do Folclore', tipo: 'Evento', descricao: 'Celebração das lendas folclóricas' },
+    
+    // Setembro 2026
+    { data: '2026-09-07', evento: 'Independência do Brasil', tipo: 'Feriado', descricao: 'Feriado nacional' },
+    { data: '2026-09-25', evento: 'Período 2 - Final', tipo: 'Período 2', descricao: 'Encerramento do período 2' },
+    
+    // Outubro 2026
+    { data: '2026-10-01', evento: 'Período 3 - Início', tipo: 'Período 3', descricao: 'Início do terceiro período' },
+    { data: '2026-10-12', evento: 'Nossa Senhora Aparecida', tipo: 'Feriado', descricao: 'Feriado nacional religioso' },
+    { data: '2026-10-20', evento: 'Dia do Professor', tipo: 'Evento', descricao: 'Homenagem aos mestres' },
+    
+    // Novembro 2026
+    { data: '2026-11-02', evento: 'Finados', tipo: 'Feriado', descricao: 'Feriado nacional' },
+    { data: '2026-11-15', evento: 'Proclamação da República', tipo: 'Feriado', descricao: 'Feriado nacional' },
+    { data: '2026-11-20', evento: 'Consciência Negra', tipo: 'Evento', descricao: 'Celebração da cultura afro-brasileira' },
+    { data: '2026-11-28', evento: 'Período 3 - Final', tipo: 'Período 3', descricao: 'Encerramento do período 3' },
+    
+    // Dezembro 2026
+    { data: '2026-12-08', evento: 'Immaculada Conceição', tipo: 'Feriado', descricao: 'Feriado nacional religioso' },
+    { data: '2026-12-25', evento: 'Natal', tipo: 'Feriado', descricao: 'Feriado nacional' },
+    { data: '2026-12-31', evento: 'Encerramento do Ano Letivo', tipo: 'Evento', descricao: 'Último dia do calendário escolar' },
+];
+
+// ===== INTEGRAÇÃO COM CALENDÁRIO ESCOLAR DO GOOGLE SHEETS =====
+const CALENDARIO_SHEET_ID = '1STOONUPAX4xfZqqY8r2HeudHfpkY0aGh';
+const CALENDARIO_API_KEY = CONFIG.API_KEY;
+
+// Mapeamento de cores da planilha
+const CORES_PERIODO = {
+    'Período 1': '#4ade80', // Verde
+    'Período 2': '#fbbf24', // Amarelo
+    'Período 3': '#60a5fa', // Azul
+    'Férias': '#fb923c',    // Laranja
+    'Feriado': '#f87171'    // Vermelho
+};
+
+// Mapeamento de emojis por tipo
+const EMOJIS_TIPO = {
+    'Período 1': '📚',
+    'Período 2': '📖',
+    'Período 3': '🎯',
+    'Férias': '🏖️',
+    'Feriado': '🎉'
+};
+
 // Cache global
 const cacheConteudo = new Map();
 const cacheLivros = new Map();
@@ -34,9 +119,122 @@ let estadoApp = {
 // ===== SISTEMA DE CALENDÁRIO COMPLETO =====
 let eventosCalendario = JSON.parse(localStorage.getItem('eventosCalendario')) || [];
 
+async function carregarCalendarioEscolar() {
+    try {
+        console.log('Carregando calendário escolar...');
+        
+        // Usar dados mockados
+        const eventosPlanilha = DADOS_CALENDARIO_MOCKADO.map((item, idx) => {
+            const tipo = item.tipo || 'Evento';
+            
+            return {
+                id: `sheet_${idx}_${Date.now()}`,
+                data: item.data,
+                titulo: `${EMOJIS_TIPO[tipo] || '📅'} ${item.evento}`,
+                descricao: item.descricao || 'Dia letivo',
+                tipo: tipo,
+                cor: CORES_PERIODO[tipo] || '#667eea',
+                origem: 'planilha',
+                dataOriginal: item.data,
+                observacoes: item.descricao
+            };
+        });
+        
+        console.log(`✅ Total de eventos carregados: ${eventosPlanilha.length}`);
+        
+        // Carregar eventos existentes
+        const eventosExistentes = JSON.parse(localStorage.getItem('eventosCalendario')) || [];
+        const eventosLocais = eventosExistentes.filter(e => e.origem !== 'planilha');
+        
+        // Combinar: planilha + locais
+        eventosCalendario = [...eventosPlanilha, ...eventosLocais];
+        
+        // Remover duplicatas por data (prioriza planilha)
+        const mapa = new Map();
+        eventosCalendario.forEach(evento => {
+            if (!mapa.has(evento.data)) {
+                mapa.set(evento.data, evento);
+            }
+        });
+        
+        eventosCalendario = Array.from(mapa.values());
+        
+        console.log(`✅ Total de eventos após merge: ${eventosCalendario.length}`);
+        console.log('✅ Eventos carregados:', eventosCalendario);
+        
+        localStorage.setItem('eventosCalendario', JSON.stringify(eventosCalendario));
+        
+        mostrarNotificacao(`📅 Calendário carregado com ${eventosPlanilha.length} eventos!`);
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Erro ao carregar calendário:', error);
+        mostrarNotificacao('⚠️ Erro ao carregar calendário: ' + error.message);
+        return false;
+    }
+}
+
 function inicializarCalendario() {
+    console.log('Inicializando calendário...');
+    
+    eventosCalendario = JSON.parse(localStorage.getItem('eventosCalendario')) || [];
+    console.log('Eventos carregados do localStorage:', eventosCalendario);
+    
+    const temDadosPlanilha = eventosCalendario.some(e => e.origem === 'planilha');
+    console.log('Tem dados da planilha:', temDadosPlanilha);
+    
+    // Sempre carrega dados da planilha na inicialização
+    console.log('Carregando dados da planilha...');
+    carregarCalendarioEscolar().then(sucesso => {
+        console.log('Carregamento concluído:', sucesso);
+        atualizarCalendario();
+        exibirEventosProximos();
+    });
+}
+
+function adicionarBotaoRecarregarCalendario() {
+    const calendarioContainer = document.querySelector('.calendario-container');
+    if (!calendarioContainer) return;
+    
+    const controles = document.querySelector('.calendario-controls');
+    if (!controles) return;
+    
+    // Verificar se botão já existe
+    if (document.querySelector('.reload-btn')) return;
+    
+    const botaoRecarregar = document.createElement('button');
+    botaoRecarregar.innerHTML = '🔄 Atualizar Calendário';
+    botaoRecarregar.className = 'reload-btn';
+    botaoRecarregar.onclick = async () => {
+        botaoRecarregar.innerHTML = '🔄 Carregando...';
+        botaoRecarregar.disabled = true;
+        
+        const sucesso = await carregarCalendarioEscolar();
+        if (sucesso) {
+            atualizarCalendario();
+            exibirEventosProximos();
+            mostrarNotificacao('✅ Calendário atualizado com sucesso!');
+        }
+        
+        setTimeout(() => {
+            botaoRecarregar.innerHTML = '🔄 Atualizar Calendário';
+            botaoRecarregar.disabled = false;
+        }, 2000);
+    };
+    
+    controles.appendChild(botaoRecarregar);
+}
+
+function mudarMes(direcao) {
+    estadoApp.mesCalendario += direcao;
+    if (estadoApp.mesCalendario < 0) {
+        estadoApp.mesCalendario = 11;
+        estadoApp.anoCalendario--;
+    } else if (estadoApp.mesCalendario > 11) {
+        estadoApp.mesCalendario = 0;
+        estadoApp.anoCalendario++;
+    }
     atualizarCalendario();
-    exibirEventosProximos();
 }
 
 function atualizarCalendario() {
@@ -69,22 +267,44 @@ function atualizarCalendario() {
 
     for (let dia = 1; dia <= diasNoMes; dia++) {
         const dataStr = `${estadoApp.anoCalendario}-${String(estadoApp.mesCalendario + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-
-        const eventosDia = eventosCalendario.filter(ev => String(ev.data).split('T')[0] === dataStr);
+        
+        const eventosDia = eventosCalendario.filter(ev => {
+            const evData = String(ev.data).split('T')[0];
+            return evData === dataStr;
+        });
+        
+        const eventoPrincipal = eventosDia.length > 0 ? eventosDia[0] : null;
 
         const dataAtual = new Date(estadoApp.anoCalendario, estadoApp.mesCalendario, dia);
         const isHoje = dataAtual.toDateString() === hoje.toDateString();
         const isFimSemana = dataAtual.getDay() === 0 || dataAtual.getDay() === 6;
 
+        let classeDia = '';
+        let estilo = '';
+        
+        if (eventoPrincipal) {
+            classeDia = eventoPrincipal.tipo.toLowerCase().replace(/\s+/g, '-');
+            estilo = `background: ${eventoPrincipal.cor}35; border: 2px solid ${eventoPrincipal.cor}; box-shadow: 0 0 10px ${eventoPrincipal.cor}40;`;
+        }
+
         html += `
-            <div class="calendario-dia ${isHoje ? 'hoje' : ''} ${isFimSemana ? 'fim-semana' : ''}"
-                 onclick="mostrarEventosDia('${dataStr}')">
+            <div class="calendario-dia ${classeDia} ${isHoje ? 'hoje' : ''} ${isFimSemana ? 'fim-semana' : ''}"
+                 onclick="mostrarEventosDia('${dataStr}')"
+                 style="${estilo}">
                 <div class="dia-numero">${dia}</div>
                 ${eventosDia.length > 0 ? `
-                    <div class="evento-indicador">
-                        ${eventosDia.length}
+                    <div class="evento-indicador" title="${eventoPrincipal.titulo}">
+                        ${eventoPrincipal.tipo === 'Férias' ? '🏖️' : 
+                          eventoPrincipal.tipo === 'Feriado' ? '🎉' : 
+                          eventoPrincipal.tipo.includes('Período') ? '📚' : '📅'}
                         <div class="evento-tooltip">
-                            ${eventosDia.map(e => `<div>• ${e.titulo}</div>`).join('')}
+                            <strong>${formatarData(dataStr)}</strong><br>
+                            ${eventosDia.map(e => `
+                                <div style="margin-top: 5px; text-align: left;">
+                                    <strong style="color: ${e.cor}">${e.tipo}</strong><br>
+                                    <small>${e.descricao}</small>
+                                </div>
+                            `).join('<hr style="margin: 5px 0;">')}
                         </div>
                     </div>
                 ` : ''}
@@ -93,18 +313,7 @@ function atualizarCalendario() {
     }
 
     gridElement.innerHTML = html;
-}
-
-function mudarMes(direcao) {
-    estadoApp.mesCalendario += direcao;
-    if (estadoApp.mesCalendario < 0) {
-        estadoApp.mesCalendario = 11;
-        estadoApp.anoCalendario--;
-    } else if (estadoApp.mesCalendario > 11) {
-        estadoApp.mesCalendario = 0;
-        estadoApp.anoCalendario++;
-    }
-    atualizarCalendario();
+    adicionarBotaoRecarregarCalendario();
 }
 
 function mostrarModalEvento(dataOpcional) {
@@ -138,8 +347,14 @@ function salvarEvento() {
         return;
     }
 
+    console.log('Salvando evento. Editando?', estadoApp.eventoEditando);
+
     if (estadoApp.eventoEditando) {
+        console.log('Atualizando evento:', estadoApp.eventoEditando);
+        
         const index = eventosCalendario.findIndex(e => e.id === estadoApp.eventoEditando);
+        console.log('Índice encontrado:', index);
+        
         if (index !== -1) {
             eventosCalendario[index] = {
                 ...eventosCalendario[index],
@@ -147,32 +362,40 @@ function salvarEvento() {
                 data,
                 descricao
             };
+            console.log('Evento atualizado:', eventosCalendario[index]);
             alert('Evento atualizado!');
+        } else {
+            alert('Erro: Evento não encontrado para edição!');
+            return;
         }
     } else {
+        console.log('Criando novo evento');
+        
         const novoEvento = {
-            id: Date.now(),
+            id: `local_${Date.now()}`,
             titulo,
             data,
-            descricao
+            descricao,
+            tipo: 'Evento',
+            cor: '#667eea',
+            origem: 'local'
         };
+        console.log('Novo evento:', novoEvento);
+        
         eventosCalendario.push(novoEvento);
         alert('Evento criado!');
     }
 
     localStorage.setItem('eventosCalendario', JSON.stringify(eventosCalendario));
 
-    // Fechar o modal de evento PRINCIPAL corretamente
     const modalEvento = document.getElementById('modalEvento');
     if (modalEvento) {
         modalEvento.classList.add('hidden');
     }
 
-    // Atualiza o calendário e a lista
     atualizarCalendario();
     exibirEventosProximos();
 
-    // Remove o modal do dia, se ainda estiver aberto
     const modalEventosDia = document.querySelector('.modal-eventos-dia');
     if (modalEventosDia) modalEventosDia.remove();
 
@@ -202,8 +425,8 @@ function mostrarEventosDia(dataStr) {
                                 <div class="evento-dia-titulo">${ev.titulo}</div>
                                 ${ev.descricao ? `<div class="evento-dia-descricao">${ev.descricao}</div>` : ''}
                                 <div class="evento-dia-actions">
-                                    <button onclick="editarEvento(${ev.id}); this.closest('.modal').remove();" class="evento-editar">✏️ Editar</button>
-                                    <button onclick="excluirEvento(${ev.id}); this.closest('.modal').remove();" class="evento-excluir">🗑️ Excluir</button>
+                                    <button onclick="editarEvento('${ev.id}'); this.closest('.modal').remove();" class="evento-editar">✏️ Editar</button>
+                                    <button onclick="excluirEvento('${ev.id}'); this.closest('.modal').remove();" class="evento-excluir">🗑️ Excluir</button>
                                 </div>
                             </div>
                         `).join('')}
@@ -219,22 +442,34 @@ function mostrarEventosDia(dataStr) {
 }
 
 function fecharModalEventosDiaEMostrarCriar(dataStr) {
-    // Fecha o modal de eventos do dia
     const modalEventosDia = document.querySelector('.modal-eventos-dia');
     if (modalEventosDia) {
         modalEventosDia.remove();
     }
 
-    // Abre o modal de criar evento
     mostrarModalEvento(dataStr);
 }
 
 function editarEvento(eventoId) {
-    const evento = eventosCalendario.find(e => e.id === eventoId);
-    if (!evento) return;
+    console.log('Editando evento com ID:', eventoId, 'Tipo:', typeof eventoId);
+    
+    const evento = eventosCalendario.find(e => {
+        console.log('Comparando:', e.id, 'com', eventoId, 'Resultado:', e.id === eventoId);
+        return e.id === eventoId;
+    });
+    
+    console.log('Evento encontrado:', evento);
+    
+    if (!evento) {
+        alert('Evento não encontrado!');
+        return;
+    }
 
     const modal = document.getElementById('modalEvento');
-    if (!modal) return;
+    if (!modal) {
+        alert('Modal de evento não encontrado!');
+        return;
+    }
 
     modal.classList.remove('hidden');
     document.getElementById('eventoTitulo').value = evento.titulo;
@@ -242,12 +477,25 @@ function editarEvento(eventoId) {
     document.getElementById('eventoDescricao').value = evento.descricao || '';
 
     estadoApp.eventoEditando = eventoId;
+    console.log('Evento em edição:', estadoApp.eventoEditando);
 }
 
 function excluirEvento(eventoId) {
+    console.log('Excluindo evento com ID:', eventoId);
+    
     if (!confirm('Tem certeza que deseja excluir este evento?')) return;
 
+    const eventoParaExcluir = eventosCalendario.find(e => e.id === eventoId);
+    console.log('Evento para excluir:', eventoParaExcluir);
+
+    if (!eventoParaExcluir) {
+        alert('Evento não encontrado!');
+        return;
+    }
+
     eventosCalendario = eventosCalendario.filter(e => e.id !== eventoId);
+    console.log('Eventos após exclusão:', eventosCalendario);
+    
     localStorage.setItem('eventosCalendario', JSON.stringify(eventosCalendario));
 
     atualizarCalendario();
@@ -261,31 +509,68 @@ function exibirEventosProximos() {
 
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
-    const umaSemana = new Date(hoje.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const trintaDias = new Date(hoje.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    console.log('Eventos para exibir:', eventosCalendario);
 
     const eventosProximos = eventosCalendario
         .map(ev => {
-            const [ano, mes, dia] = String(ev.data).split('-').map(Number);
-            return { ...ev, _dateObj: new Date(ano, mes - 1, dia) };
+            const partes = String(ev.data).split('-');
+            const ano = parseInt(partes[0]);
+            const mes = parseInt(partes[1]);
+            const dia = parseInt(partes[2]);
+            const dataEvento = new Date(ano, mes - 1, dia);
+            dataEvento.setHours(0, 0, 0, 0);
+            
+            return {
+                ...ev,
+                _dateObj: dataEvento,
+                diasRestantes: Math.floor((dataEvento - hoje) / (1000 * 60 * 60 * 24))
+            };
         })
+        .filter(ev => ev._dateObj >= hoje && ev._dateObj <= trintaDias)
         .sort((a, b) => a._dateObj - b._dateObj);
 
+    console.log('Eventos próximos filtrados:', eventosProximos);
+
     if (eventosProximos.length === 0) {
-        container.innerHTML = '<p class="sem-eventos">Nenhum evento para os próximos 7 dias</p>';
+        container.innerHTML = `
+            <div class="sem-eventos">
+                <p>📅 Nenhum evento programado para os próximos 30 dias</p>
+                <button onclick="carregarCalendarioEscolar(); setTimeout(() => { atualizarCalendario(); exibirEventosProximos(); }, 1500);" class="small-btn">
+                    🔄 Carregar Calendário Escolar
+                </button>
+            </div>
+        `;
         return;
     }
 
-    const html = eventosProximos.map(ev => `
-        <div class="evento-proximo">
-            <div class="evento-data">${formatarData(ev.data)}</div>
-            <div class="evento-titulo">${ev.titulo}</div>
-            ${ev.descricao ? `<div class="evento-descricao">${ev.descricao}</div>` : ''}
-            <div class="evento-actions">
-                <button onclick="editarEvento(${ev.id})" class="evento-editar">✏️ Editar</button>
-                <button onclick="excluirEvento(${ev.id})" class="evento-excluir">🗑️ Excluir</button>
-            </div>
+    const html = `
+        <div class="eventos-header">
+            <h3>📅 Próximos Eventos (30 dias)</h3>
+            <small>${eventosProximos.length} eventos encontrados</small>
         </div>
-    `).join('');
+        ${eventosProximos.map(ev => `
+            <div class="evento-proximo" style="border-left: 5px solid ${ev.cor || '#667eea'}; background: ${ev.cor || '#667eea'}15;">
+                <div class="evento-header">
+                    <span class="evento-badge" style="background: ${ev.cor || '#667eea'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold;">
+                        ${EMOJIS_TIPO[ev.tipo] || '📅'} ${ev.tipo}
+                    </span>
+                    <span class="evento-data" style="font-weight: bold;">${formatarData(ev.data)}</span>
+                </div>
+                <div class="evento-titulo" style="font-weight: bold; margin-top: 8px;">${ev.titulo}</div>
+                ${ev.descricao ? `<div class="evento-descricao" style="color: rgba(255,255,255,0.8); font-size: 0.9em; margin-top: 4px;">${ev.descricao}</div>` : ''}
+                <div class="evento-dias" style="margin-top: 8px;">
+                    ${ev.diasRestantes === 0 ? 
+                        '<span class="hoje-badge" style="background: #f87171; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">🎯 Hoje!</span>' : 
+                        ev.diasRestantes < 0 ? 
+                            '<span class="passado" style="background: #9ca3af; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">⏳ Já passou</span>' : 
+                            `<span class="futuro" style="background: #60a5fa; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">⏰ Em ${ev.diasRestantes} dias</span>`
+                    }
+                </div>
+            </div>
+        `).join('')}
+    `;
 
     container.innerHTML = html;
 }
@@ -339,6 +624,7 @@ function abrirSecaoDiretamente(secao) {
     // Inicializar seções específicas
     if (secao === 'teacher') {
         carregarPastas();
+        exibirWarmupsGames();
     } else if (secao === 'calendario') {
         inicializarCalendario();
     } else if (secao === 'favoritos') {
@@ -491,8 +777,107 @@ const JOGOS = [
         imagem: './ztype.png',
         emojiFallback: '⌨️',
         tipo: 'iframe'
+    },
+    {
+        id: 'lingoclip',
+        nome: 'LingoClip',
+        descricao: 'Pratique inglês de forma divertida completando músicas e clipes interativos.',
+        url: 'https://lingoclip.app/en',
+        imagem: './LingoClip.png', 
+        emojiFallback: '🎤',
+        tipo: 'novaAba'
     }
 ];
+
+// NOVA SEÇÃO: WarmUpsAndGames
+const WARMUPS_GAMES = [
+    {
+        id: 'Bingo',
+        nome: 'Bingo',
+        descricao: 'Jogo de Bingo interativo.',
+        url: 'https://www.flippity.net/v2/Bingo.htm',
+        imagem: './Bingo.png',
+        emojiFallback: '🎲',
+        tipo: 'novaAba'
+    },
+    {
+        id: 'Crosswords',
+        nome: 'Crosswords',
+        descricao: 'Cruzadinha, vocabulário para todas as idades.',
+        url: 'https://www.flippity.net/v2/cw.php?k=e/2PACX-1vTFCfPRvdKWGYQsTQBH-k_mUUe4gSlFOMStlmwuIMSvtMSaEueaPKH2-gxJOA7bzOt1Rk4ZuJppe5t-&d=y',
+        imagem: './Crossword.png',
+        emojiFallback: '🧩',
+        tipo: 'novaAba'
+    },
+    {
+        id: 'Kahoot',
+        nome: 'Kahoot',
+        descricao: 'Jogo de perguntas e respostas interativo.',
+        url: 'https://create.kahoot.it/profiles/024545d8-5f58-4e03-b06c-07785518d125',
+        imagem: './Kahoot.png',
+        emojiFallback: '❓',
+        tipo: 'novaAba'
+    },
+    {
+        id: 'Roleta',
+        nome: 'Roleta',
+        descricao: 'Jogo de Roleta interativo e customizável.',
+        url: 'https://flippity.net/v2/rp.php?c=Katharine,Meryl,Jack,Ingrid,Daniel,Frances,Bette,Spencer,Denzel,Marlon,Jake,Cate,Dustin,Jane,Robert&t=Random%20Name%20Picker&d=y',
+        imagem: './Roleta.png',
+        emojiFallback: '',
+        tipo: 'novaAba'
+    },
+    {
+        id: 'Quiz',
+        nome: 'Quiz',
+        descricao: 'Jogo de perguntas e respostas.',
+        url: 'https://www.flippity.net/v2/qs.php?k=e/2PACX-1vTLmBDh4csYv11XmxgPzwI8LnbWuqmxikNq0G4c67wx73OCk8IzUoxiOJFCU_HLRLU4SySdO6Qkr1qu&d=y',
+        imagem: './Quiz.png',
+        emojiFallback: '',
+        tipo: 'novaAba'
+    },
+    {
+        id: 'Typing',
+        nome: 'Typing',
+        descricao: 'Jogo de digitação.',
+        url: 'https://www.flippity.net/v2/tt.php?k=e/2PACX-1vSuUaZyFsG_bX8Oi7ixEySVeWrz6WhgR-X2qEVezuR4xMlYiAay5WOW4JcuwLnHvYoe2XLGe4jzA6gy&d=y',
+        imagem: './Typing.png',
+        emojiFallback: '',
+        tipo: 'novaAba'
+    }
+    // Adicione mais objetos conforme desejar
+];
+
+function exibirWarmupsGames() {
+    const container = document.getElementById('listaWarmupsGames');
+    if (!container) return;
+
+    let html = '';
+    WARMUPS_GAMES.forEach(jogo => {
+        html += `
+            <div class="game-card" onclick="abrirWarmupGame('${jogo.id}')">
+                <div class="game-image-container">
+                    <img src="${jogo.imagem}" alt="${jogo.nome}" class="game-image"
+                         onerror="handleImageError(this, '${jogo.emojiFallback}')">
+                </div>
+                <div class="game-content">
+                    <h3 class="game-title">${jogo.nome}</h3>
+                    <p class="game-description">${jogo.descricao}</p>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function abrirWarmupGame(jogoId) {
+    const jogo = WARMUPS_GAMES.find(j => j.id === jogoId);
+    if (!jogo) {
+        console.error('WarmUp/Game não encontrado:', jogoId);
+        return;
+    }
+    window.open(jogo.url, '_blank');
+}
 
 // Inicializar lista de jogos
 function inicializarGames() {
