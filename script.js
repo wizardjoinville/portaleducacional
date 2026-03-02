@@ -700,6 +700,67 @@ function abrirSubSecao(id) {
     }
 }
 
+// ===== SISTEMA DE ADMINISTRAÇÃO =====
+function abrirSubAdm(id) {
+    // Esconder todas as subseções admin
+    const subsecoes = ['gradeAlunos'];
+    subsecoes.forEach(secao => {
+        const elemento = document.getElementById(secao);
+        if (elemento) elemento.classList.add('hidden');
+    });
+    
+    // Mostrar a subseção solicitada
+    const secaoAlvo = document.getElementById(id);
+    if (secaoAlvo) {
+        secaoAlvo.classList.remove('hidden');
+    }
+    
+    // Carregar conteúdo específico se necessário
+    if (id === 'gradeAlunos') {
+        carregarGradeAlunos();
+    }
+}
+
+function carregarGradeAlunos() {
+    const container = document.getElementById('gradeAlunos');
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1JMDyHB2azcmrAl23BNgllY0J9I2vUL3b/view';
+    
+    if (container) {
+        // Criar HTML com mensagem e botão para abrir
+        const html = `
+            <h2>👥 Grade de Alunos</h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; text-align: center; margin: 20px 0;">
+                <p style="font-size: 18px; margin-bottom: 20px;">
+                    📋 Clique no botão abaixo para consultar a Grade de Alunos com comentários:
+                </p>
+                <button onclick="window.open('${sheetUrl}', '_blank')" 
+                        style="background: rgba(52, 211, 153, 0.6); border: 2px solid rgba(52, 211, 153, 0.8); padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer; color: white; font-weight: bold; transition: all 0.3s ease;">
+                    👁️ Visualizar Grade de Alunos
+                </button>
+                <p style="margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.7);">
+                    ℹ️ Modo somente leitura - comentários visíveis
+                </p>
+            </div>
+        `;
+        container.innerHTML = html;
+    }
+}
+
+function voltarAdmin() {
+    // Esconder todas as subseções admin
+    const subsecoes = ['gradeAlunos'];
+    subsecoes.forEach(secao => {
+        const elemento = document.getElementById(secao);
+        if (elemento) elemento.classList.add('hidden');
+    });
+    
+    // Esconder iframe
+    const iframeContainer = document.getElementById('iframeContainerAdmin');
+    if (iframeContainer) {
+        iframeContainer.classList.add('hidden');
+    }
+}
+
 // ===== FUNÇÃO PARA CARREGAR EXTRAS DOS ALUNOS =====
 async function carregarExtrasAlunos() {
     try {

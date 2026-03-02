@@ -100,7 +100,15 @@
     <div id="admin" class="section protected-section">
         <button class="back-btn" onclick="voltar()">⬅ Voltar ao Portal</button>
         <h2>Área Administrativa</h2>
-        <p>Conteúdo protegido por senha.</p>
+
+        <div class="main-buttons">
+            <button onclick="abrirSubAdm('gradeAlunos')">👥 Grade de Alunos</button>
+        </div>
+
+        <!-- Grade de Alunos -->
+        <div id="gradeAlunos" class="hidden">
+            <!-- Conteúdo será preenchido dinamicamente -->
+        </div>
     </div>
 
     <!-- SEÇÃO ALUNOS (COMPLETAMENTE ATUALIZADA) -->
