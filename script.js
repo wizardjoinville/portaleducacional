@@ -624,6 +624,16 @@ function abrirSecaoDiretamente(secao) {
     if (!secaoElement) return;
     secaoElement.style.display = 'block';
 
+    // Mostrar barra de pesquisa apenas se for teacher
+    const searchGlobal = document.getElementById('searchGlobal');
+    if (searchGlobal) {
+        if (secao === 'teacher') {
+            searchGlobal.classList.remove('hidden');
+        } else {
+            searchGlobal.classList.add('hidden');
+        }
+    }
+
     // Inicializar seções específicas
     if (secao === 'teacher') {
         carregarPastas();
@@ -1001,6 +1011,12 @@ function voltar() {
     const resultados = document.getElementById('searchResults');
     if (resultados) {
         resultados.classList.remove('active');
+    }
+
+    // Esconder barra de pesquisa
+    const searchGlobal = document.getElementById('searchGlobal');
+    if (searchGlobal) {
+        searchGlobal.classList.add('hidden');
     }
 }
 
