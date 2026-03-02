@@ -100,6 +100,9 @@ const EMOJIS_TIPO = {
 // Cache global
 const cacheConteudo = new Map();
 const cacheLivros = new Map();
+let todosOsLivros = []; // Armazenar todos os livros para busca
+let todasAsAtividades = []; // Armazenar todas as atividades para busca
+let todosOsArquivosLivros = []; // Índice de todos os arquivos dentro dos livros (para busca por lição)
 
 // Estado da aplicação
 let estadoApp = {
@@ -719,6 +722,16 @@ async function carregarExtrasAlunos() {
 function exibirExtrasAlunos(arquivos) {
     const container = document.getElementById('listaExtrasAlunos');
     
+    // Armazenar atividades para busca
+    todasAsAtividades = arquivos.map(arquivo => ({
+        id: arquivo.id,
+        nome: arquivo.name,
+        tipo: arquivo.mimeType === 'application/vnd.google-apps.folder' ? 'Pasta de Atividade' : 'Arquivo de Atividade',
+        link: arquivo.webViewLink,
+        descricao: arquivo.name,
+        mimeType: arquivo.mimeType
+    }));
+    
     let html = '<div class="extras-grid">';
     
     arquivos.forEach(arquivo => {
@@ -749,6 +762,15 @@ const JOGOS = [
         url: 'https://www.gamestolearnenglish.com/',
         imagem: './english-games.png',
         emojiFallback: '🌍',
+        tipo: 'iframe'
+    },
+    {
+        id: 'english-practice-tool',
+        nome: 'English Practice Tool',
+        descricao: 'Ferramenta para aprimorar o inglês',
+        url: 'https://wizardjoinville.github.io/English-Practice-Tool/',
+        imagem: '',
+        emojiFallback: '🛠️',
         tipo: 'iframe'
     },
     {
@@ -1232,6 +1254,58 @@ function buscarConteudo(termo) {
         );
     }
 
+    // Buscar em livros
+    if (todosOsLivros && todosOsLivros.length > 0) {
+        resultados = resultados.concat(
+            todosOsLivros.filter(livro =>
+                livro.nome.toLowerCase().includes(termoLower)
+            ).map(livro => ({
+                ...livro,
+                tipo: 'livro',
+                categoria: '📚 Livros',
+                descricao: livro.nome
+            }))
+        );
+    }
+
+    // Buscar em atividades
+    if (todasAsAtividades && todasAsAtividades.length > 0) {
+        resultados = resultados.concat(
+            todasAsAtividades.filter(atividade =>
+                atividade.nome.toLowerCase().includes(termoLower)
+            ).map(atividade => ({
+                ...atividade,
+                tipo: 'atividade',
+                categoria: '📝 Atividades'
+            }))
+        );
+    }
+
+    // Buscar em arquivos dos livros (lições)
+    if (todosOsArquivosLivros && todosOsArquivosLivros.length > 0) {
+        const numericOnly = /^\d+$/.test(termoLower.trim());
+        const numero = numericOnly ? parseInt(termoLower.trim(), 10) : null;
+
+        const encontrados = todosOsArquivosLivros.filter(arq => {
+            const nomeLower = arq.nome.toLowerCase();
+            if (numericOnly) {
+                const num = extrairNumero(arq.nome);
+                if (num !== null && num === numero) return true;
+                // também permitir 'lição 3' ou 'lesson 3'
+                if (nomeLower.includes(`lição ${numero}`) || nomeLower.includes(`lesson ${numero}`)) return true;
+                return false;
+            }
+            return nomeLower.includes(termoLower) || (arq.pastaNome && arq.pastaNome.toLowerCase().includes(termoLower));
+        }).map(arq => ({
+            ...arq,
+            tipo: 'arquivo-livro',
+            categoria: '📚 Lição',
+            descricao: arq.pastaNome || 'Livro'
+        }));
+
+        resultados = resultados.concat(encontrados);
+    }
+
     exibirResultadosBusca(resultados, termo);
 }
 
@@ -1282,6 +1356,36 @@ function exibirResultadosBusca(resultados, termo) {
                     </div>
                 </div>
             `;
+        } else if (item.tipo === 'livro') {
+            return `
+                <div class="search-result-item" onclick="window.open('${item.link}', '_blank')">
+                    <span class="search-icon">📚</span>
+                    <div class="search-info">
+                        <div class="search-title">${item.nome}</div>
+                        <div class="search-details">Livro • ${item.origem === 'english' ? 'English' : item.origem === 'tg' ? 'TG' : 'Extra'}</div>
+                    </div>
+                </div>
+            `;
+        } else if (item.tipo === 'arquivo-livro') {
+            return `
+                <div class="search-result-item" onclick="window.open('${item.link}', '_blank')">
+                    <span class="search-icon">📚</span>
+                    <div class="search-info">
+                        <div class="search-title">${item.nome}</div>
+                        <div class="search-details">Lição • ${item.descricao}</div>
+                    </div>
+                </div>
+            `;
+        } else if (item.tipo === 'atividade') {
+            return `
+                <div class="search-result-item" onclick="window.open('${item.link}', '_blank')">
+                    <span class="search-icon">📝</span>
+                    <div class="search-info">
+                        <div class="search-title">${item.nome}</div>
+                        <div class="search-details">Atividade • ${item.mimeType === 'application/vnd.google-apps.folder' ? 'Pasta' : 'Arquivo'}</div>
+                    </div>
+                </div>
+            `;
         }
     }).join('');
 
@@ -1307,6 +1411,9 @@ async function carregarPastas() {
         }
 
         const { novos, kids, antigos, extras, outrosIdiomas } = classificarLivros(pastasPrincipais);
+
+        // Armazenar todos os livros para busca
+        todosOsLivros = [...novos, ...kids, ...antigos, ...extras, ...outrosIdiomas];
 
         criarEstruturaHTML(novos, 'listaNovos', 'Novos');
         criarEstruturaHTML(kids, 'listaKids', 'Kids');
@@ -1571,6 +1678,8 @@ async function carregarConteudoLivro(pastaId, containerDiv) {
         let arquivos = await carregarTodosArquivosPasta(pastaId);
         arquivos = ordenarArquivosNumericamente(arquivos);
         cacheConteudo.set(pastaId, arquivos);
+        // Atualizar índice global de arquivos dos livros
+        indexarArquivosLivro(pastaId, arquivos);
         exibirConteudo(arquivos, containerDiv);
 
     } catch (error) {
@@ -1639,6 +1748,8 @@ async function carregarConteudoMultiplasPastas(pastaIds) {
             try {
                 const conteudo = await carregarTodosArquivosPasta(pastaId);
                 cacheConteudo.set(pastaId, conteudo);
+                // Indexar ao carregar em background
+                indexarArquivosLivro(pastaId, conteudo);
                 return { pastaId, conteudo };
             } catch (error) {
                 console.error(`Erro ao carregar pasta ${pastaId}:`, error);
@@ -1676,6 +1787,31 @@ function ordenarArquivosNumericamente(arquivos) {
 
         return a.nome.localeCompare(b.nome);
     });
+}
+
+// Indexar arquivos de um livro (substitui entradas antigas dessa pasta)
+function indexarArquivosLivro(pastaId, arquivos) {
+    try {
+        // remover entradas anteriores da mesma pasta
+        todosOsArquivosLivros = todosOsArquivosLivros.filter(a => a.pastaId !== pastaId);
+
+        // obter nome da pasta (livro) se disponível
+        const pasta = todosOsLivros.find(p => p.id === pastaId);
+        const pastaNome = pasta ? pasta.nome : '';
+
+        const novos = arquivos.map(arq => ({
+            id: arq.id,
+            nome: arq.nome,
+            link: arq.link,
+            tipo: arq.tipo,
+            pastaId,
+            pastaNome
+        }));
+
+        todosOsArquivosLivros = todosOsArquivosLivros.concat(novos);
+    } catch (e) {
+        console.error('Erro ao indexar arquivos do livro:', e);
+    }
 }
 
 function extrairNumero(nome) {
