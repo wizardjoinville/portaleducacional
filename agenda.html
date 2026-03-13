@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel de Atendimentos</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+<h1>Painel de Atendimentos</h1>
+
+<div class="topInfo">
+<div id="data"></div>
+<div id="relogio"></div>
+</div>
+
+</header>
+
+<section class="filtros">
+
+<button class="btnFiltro ativo" onclick="mudarFiltro('hoje', this)">Hoje</button>
+<button class="btnFiltro" onclick="mudarFiltro('amanha', this)">Amanhã</button>
+<button class="btnFiltro" onclick="mudarFiltro('semana', this)">Semana</button>
+
+</section>
+
+<section class="dashboard">
+
+<div class="cardResumo">
+<span>Atendimentos</span>
+<strong id="contadorTotal">0</strong>
+</div>
+
+<div class="cardResumo">
+<span>Professores Aula Zero</span>
+<div id="contadorProf"></div>
+</div>
+
+</section>
+
+<section id="agenda" class="agenda"></section>
+
+<div id="semAgenda" class="semAgenda">
+Nenhum agendamento encontrado
+</div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<audio id="alertaSom">
+<source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
+</audio>
+
+<script src="script.js"></script>
+
+<script>
+
+function atualizarRelogio(){
+
+const agora = new Date()
+
+document.getElementById("relogio").innerText =
+agora.toLocaleTimeString('pt-BR')
+
+document.getElementById("data").innerText =
+agora.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})
+
+}
+
+setInterval(atualizarRelogio,1000)
+
+atualizarRelogio()
+
+</script>
+
+</body>
+</html>
+
