@@ -1977,3 +1977,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+function abrirAgenda() {
+    window.open("agenda.html", "_blank");
+}
