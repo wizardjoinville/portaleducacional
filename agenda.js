@@ -5,7 +5,7 @@ const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:j
 // Estado global
 let filtroAtual = "hoje"
 let professorFiltro = "todos"
-let allAgendamentos = []          // todos os registros carregados da planilha
+let allAgendamentos = []
 let ultimoTotal = 0
 
 // -------------------- UTILITÁRIOS --------------------
@@ -22,10 +22,10 @@ function mudarFiltro(f, botao) {
     filtroAtual = f
     document.querySelectorAll(".btnFiltro").forEach(b => b.classList.remove("ativo"))
     botao.classList.add("ativo")
-    renderAgenda()   // re-renderiza com os dados já carregados
+    renderAgenda()
 }
 
-// -------------------- CONVERSÃO DE DATAS (igual ao original) --------------------
+// -------------------- CONVERSÃO DE DATAS --------------------
 function converterDataGoogleSheets(valor) {
     if (!valor) return null
     const match = String(valor).match(/Date\((\d+),(\d+),(\d+)\)/)
@@ -41,7 +41,6 @@ function converterDataGoogleSheets(valor) {
 function converterHoraGoogleSheets(valor) {
     if (!valor) return "00:00"
     const horaStr = String(valor).trim()
-    console.log("Convertendo hora:", horaStr)
 
     const matchDate = horaStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+)/)
     if (matchDate) {
@@ -71,8 +70,28 @@ function converterHoraGoogleSheets(valor) {
     match = horaStr.match(/^(\d{1,2})/)
     if (match) return `${match[1].padStart(2, '0')}:00`
 
-    console.log("❌ Formato de hora não reconhecido:", horaStr)
     return "00:00"
+}
+
+// -------------------- FILTRO DE DATA --------------------
+function aplicarFiltroData(agendamento, filtro) {
+    const dataBase = agendamento.dataBase
+    if (!dataBase) return false
+
+    const agora = new Date()
+
+    if (filtro === "hoje") {
+        return dataBase.toDateString() === agora.toDateString()
+    } else if (filtro === "amanha") {
+        let amanha = new Date()
+        amanha.setDate(amanha.getDate() + 1)
+        return dataBase.toDateString() === amanha.toDateString()
+    } else if (filtro === "semana") {
+        let limite = new Date()
+        limite.setDate(limite.getDate() + 7)
+        return dataBase >= new Date().setHours(0, 0, 0, 0) && dataBase <= limite
+    }
+    return true
 }
 
 // -------------------- ATUALIZAR DROPDOWN DE PROFESSORES --------------------
@@ -113,30 +132,16 @@ function renderAgenda() {
     const agenda = document.getElementById("agenda")
     agenda.innerHTML = ""
 
-    // Filtrar por data e professor
-    const filtered = allAgendamentos.filter(ag => {
-        const dataBase = ag.dataBase
-        if (!dataBase) return false
+    // Filtrar por data primeiro (para contadores)
+    const agendamentosDoFiltroData = allAgendamentos.filter(ag => 
+        aplicarFiltroData(ag, filtroAtual)
+    )
 
-        // Filtro de data
-        if (filtroAtual === "hoje") {
-            if (dataBase.toDateString() !== agora.toDateString()) return false
-        } else if (filtroAtual === "amanha") {
-            let amanha = new Date()
-            amanha.setDate(amanha.getDate() + 1)
-            if (dataBase.toDateString() !== amanha.toDateString()) return false
-        } else if (filtroAtual === "semana") {
-            let limite = new Date()
-            limite.setDate(limite.getDate() + 7)
-            if (dataBase > limite) return false
-            if (dataBase < new Date().setHours(0, 0, 0, 0)) return false
-        }
-
-        // Filtro por professor
+    // Aplicar filtro de professor (sobre os já filtrados por data)
+    const filtered = agendamentosDoFiltroData.filter(ag => {
         if (professorFiltro !== "todos") {
-            if (ag.aulaZero !== professorFiltro) return false
+            return ag.aulaZero === professorFiltro
         }
-
         return true
     })
 
@@ -240,25 +245,31 @@ function renderAgenda() {
     document.getElementById("contadorAndamento").innerText = contadorAndamento
     document.getElementById("contadorFinalizados").innerText = contadorFinalizados
 
-    // Contagem de professores (geral, não filtrada)
+    // --- CONTAGEM DE PROFESSORES (DINÂMICA POR FILTRO DE DATA) ---
+    // Aqui usamos agendamentosDoFiltroData (filtrados APENAS por data, sem filtro de professor)
     const professoresContagem = {}
-    allAgendamentos.forEach(ag => {
+    agendamentosDoFiltroData.forEach(ag => {
         const prof = ag.aulaZero
         if (prof && prof !== "-" && prof !== "null" && prof !== null) {
             professoresContagem[prof] = (professoresContagem[prof] || 0) + 1
         }
     })
+
     let profHTML = ""
-    for (let p in professoresContagem) {
-        profHTML += `${p}: ${professoresContagem[p]}<br>`
+    if (Object.keys(professoresContagem).length > 0) {
+        for (let p in professoresContagem) {
+            profHTML += `${p}: ${professoresContagem[p]}<br>`
+        }
+    } else {
+        profHTML = "Nenhum professor com aula zero neste período"
     }
-    document.getElementById("contadorProf").innerHTML = profHTML || "Nenhum"
+    document.getElementById("contadorProf").innerHTML = profHTML
 
     // Mensagem de vazio
     const semAgenda = document.getElementById("semAgenda")
     semAgenda.style.display = filtered.length === 0 ? "block" : "none"
 
-    // Notificação se houver novos itens (opcional)
+    // Notificação
     if (filtered.length > ultimoTotal) {
         notificar("🎉 Novo agendamento detectado!")
     } else {
@@ -326,7 +337,7 @@ async function carregarDados() {
     }
 }
 
-// -------------------- RELÓGIO EM TEMPO REAL --------------------
+// -------------------- RELÓGIO --------------------
 function iniciarRelogio() {
     function atualizarRelogio() {
         const agora = new Date()
@@ -347,7 +358,6 @@ function iniciarRelogio() {
 document.addEventListener("DOMContentLoaded", () => {
     iniciarRelogio()
 
-    // Evento do filtro de professor
     const selectProf = document.getElementById("filtroProfessor")
     if (selectProf) {
         selectProf.addEventListener("change", (e) => {
@@ -356,9 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
-    // Primeira carga
     carregarDados()
-
-    // Atualização periódica a cada 30s
     setInterval(carregarDados, 30000)
 })
