@@ -6,7 +6,7 @@ const CONFIG = {
         ENGLISH: "1pOe6fvSe6w08taSC3UnoOQnPUQAZcdw8",
         TG: "1Z7rjMo1jbdxfa5TR6aDo4j-8GjdqzuOJ",
         EXTRA: "1MdxVzRvvGXFezEcsPSSoefglIyD_nOM-",
-        EXTRAS_ALUNOS: "1Edwnbmic1sK7krY-0sG_NTEpcA3DvpLr"
+        EXTRAS_ALUNOS: "1LJv-bOUnFlxManvbbCQnJXKg741BiLZ0"
     },
     ENGLISH_FOLDER_NAME: "English",
     SENHA_PROTEGIDA: "2020"
