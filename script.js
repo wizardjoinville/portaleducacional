@@ -842,7 +842,7 @@ const JOGOS = [
         url: 'https://wizardjoinville.github.io/English-Practice-Tool/',
         imagem: '',
         emojiFallback: '🛠️',
-        tipo: 'iframe'
+        tipo: 'novaAba'
     },
     {
         id: 'foodguessr',
@@ -879,6 +879,15 @@ const JOGOS = [
         imagem: './LingoClip.png', 
         emojiFallback: '🎤',
         tipo: 'novaAba'
+    },
+    {
+        id: 'Knoword',
+        nome: 'Knoword',
+        descricao: 'Pratique verbos irregulares.',
+        url: 'https://knoword.com/packs/irregular-verbs-3OSwW',
+        imagem: './Knoword.png',
+        emojiFallback: '❓',
+        tipo: 'novaAba'
     }
 ];
 
@@ -912,6 +921,15 @@ const WARMUPS_GAMES = [
         tipo: 'novaAba'
     },
     {
+        id: 'Knoword',
+        nome: 'Knoword',
+        descricao: 'Pratique verbos irregulares.',
+        url: 'https://knoword.com/packs/irregular-verbs-3OSwW',
+        imagem: './Knoword.png',
+        emojiFallback: '❓',
+        tipo: 'novaAba'
+    },
+    {
         id: 'Roleta',
         nome: 'Roleta',
         descricao: 'Jogo de Roleta interativo e customizável.',
@@ -926,6 +944,15 @@ const WARMUPS_GAMES = [
         descricao: 'Jogo de perguntas e respostas.',
         url: 'https://www.flippity.net/v2/qs.php?k=e/2PACX-1vTLmBDh4csYv11XmxgPzwI8LnbWuqmxikNq0G4c67wx73OCk8IzUoxiOJFCU_HLRLU4SySdO6Qkr1qu&d=y',
         imagem: './Quiz.png',
+        emojiFallback: '',
+        tipo: 'novaAba'
+    },
+    {
+        id: 'Millionaire',
+        nome: 'Millionaire',
+        descricao: 'Jogo de perguntas e respostas.',
+        url: 'https://www.arkadium.com/games/millionaire/',
+        imagem: './Milionaire.png',
         emojiFallback: '',
         tipo: 'novaAba'
     },
